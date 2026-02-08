@@ -1,162 +1,180 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl" id="main">
+<html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mustafa | Star Developer</title>
+    <title>Mustafa | Crystal Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --neon: #00f2fe; --space: #010409; --gold: #f1c40f; }
+        :root { --neon: #00f2fe; --glass: rgba(255, 255, 255, 0.05); }
 
-        body, html { margin: 0; padding: 0; background: var(--space); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-
-        /* Starfield Background */
-        #star-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-
-        /* Mobile Header */
-        header {
-            position: fixed; top: 0; width: 100%; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); z-index: 1000;
+        body, html { 
+            margin: 0; padding: 0; background: #000; color: white;
+            font-family: 'Segoe UI', sans-serif; overflow-x: hidden; height: 100%;
         }
 
-        .menu-icon { font-size: 1.8rem; color: var(--neon); cursor: pointer; }
+        /* 3D Starfield */
+        #starCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Sidebar Overlay */
+        /* Professional Header */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 15px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-btn { font-size: 1.5rem; color: var(--neon); cursor: pointer; padding: 5px; }
+
+        /* Transparent Sidebar */
         .sidebar {
-            position: fixed; top: 0; right: -100%; width: 80%; height: 100%;
-            background: rgba(1, 4, 9, 0.95); backdrop-filter: blur(20px);
-            transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1); z-index: 2000;
-            padding: 80px 30px; border-left: 1px solid var(--neon);
+            position: fixed; top: 0; right: -100%; width: 85%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(25px);
+            transition: 0.5s cubic-bezier(0.8, 0, 0.2, 1); z-index: 2000;
+            padding: 100px 30px; border-left: 1px solid var(--neon);
         }
         .sidebar.active { right: 0; }
 
-        /* Main Content */
-        .container { padding: 100px 20px; }
-
-        /* Deep Dive System */
-        .core-card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 242, 254, 0.2);
-            border-radius: 20px; padding: 25px; margin-bottom: 20px; transition: 0.4s;
+        .nav-link {
+            display: block; padding: 15px; margin: 10px 0; color: white;
+            text-decoration: none; border-radius: 12px; background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1); font-weight: 500;
         }
 
-        .sub-sections { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .sub-item { 
-            background: rgba(0, 242, 254, 0.05); padding: 15px; border-radius: 12px; 
-            margin-bottom: 10px; border-right: 3px solid var(--neon); animation: slideIn 0.3s forwards;
+        /* Crystal Dashboard Cards */
+        .dashboard { padding: 100px 20px 40px; }
+        
+        .crystal-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 25px; margin-bottom: 20px;
+            backdrop-filter: blur(15px); transition: 0.3s;
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .crystal-card h2 { color: var(--neon); margin-top: 0; display: flex; align-items: center; gap: 10px; }
 
-        .btn-expand { background: none; border: 1px solid var(--neon); color: var(--neon); padding: 8px 20px; border-radius: 50px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .depth-content { display: none; margin-top: 20px; animation: fadeIn 0.4s ease; }
+        
+        .tech-node {
+            background: rgba(0, 242, 254, 0.05); padding: 15px; border-radius: 15px;
+            margin-bottom: 10px; border-right: 3px solid var(--neon);
+        }
 
-        .lang-switch { display: flex; gap: 10px; margin-bottom: 30px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .action-btn {
+            background: linear-gradient(90deg, var(--neon), #4facfe);
+            border: none; color: black; padding: 12px; border-radius: 15px;
+            width: 100%; font-weight: bold; margin-top: 10px; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <canvas id="star-canvas"></canvas>
+    <canvas id="starCanvas"></canvas>
 
     <header>
-        <div class="menu-icon" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
-        <div style="font-weight: 900; letter-spacing: 1px; color: var(--neon);">MUSTAFA STAR</div>
+        <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
+        <div style="font-weight: 800; letter-spacing: 2px;">MUSTAFA <span style="color:var(--neon)">OS</span></div>
     </header>
 
     <div class="sidebar" id="sidebar">
-        <div class="menu-icon" onclick="toggleSidebar()" style="position:absolute; top:20px; left:20px;"><i class="fas fa-times"></i></div>
-        <div class="lang-switch">
-            <button onclick="setLang('ku')" class="btn-expand" style="width:auto">KU</button>
-            <button onclick="setLang('en')" class="btn-expand" style="width:auto">EN</button>
-        </div>
-        <h2 id="s-title">گەڕیان د ستێراندا</h2>
-        <p id="s-desc">ژ لایێ چەپێ بەشان دیار بکە</p>
+        <div class="menu-btn" onclick="toggleMenu()" style="position:absolute; top:20px; left:20px;"><i class="fas fa-xmark"></i></div>
+        <a href="#" class="nav-link"><i class="fas fa-house"></i> Dashboard</a>
+        <a href="#" class="nav-link"><i class="fas fa-microchip"></i> AI Engine</a>
+        <a href="#" class="nav-link"><i class="fas fa-globe"></i> Web Lab</a>
+        <a href="#" class="nav-link"><i class="fas fa-shield"></i> Security</a>
     </div>
 
-    <div class="container">
-        <div class="core-card">
-            <h2 id="c1-t"><i class="fas fa-code"></i> Web Core System</h2>
-            <p id="c1-d">هەمی تشت دەربارەی ئاڤاکرنا وێبسایتێن پێشکەفتی.</p>
-            <button class="btn-expand" onclick="toggleSub('web-sub')" id="b1">EXPLORE DEPTHS</button>
+    <div class="dashboard">
+        <div class="crystal-card">
+            <h2><i class="fas fa-code-branch"></i> Web Architect</h2>
+            <p style="color: #94a3b8;">پێکهاتەیا وێبسایتێن ئاڵۆز و سیستەمێن ئۆنلاین.</p>
+            <button class="action-btn" onclick="toggleDepth('web-depth')">OPEN MODULE</button>
             
-            <div id="web-sub" class="sub-sections">
-                <div class="sub-item">
-                    <h4>Frontend Mastery</h4>
-                    <p>دیزاین و کارلێکرن ب HTML, CSS, JS.</p>
-                </div>
-                <div class="sub-item">
-                    <h4>Backend Engine</h4>
-                    <p>داتابەیس و سێرڤەر و ئاساییش.</p>
+            <div id="web-depth" class="depth-content">
+                <div class="tech-node">
+                    <h4>Frontend Logic</h4>
+                    <p>ئاڤاکرنا ڕووکارێ بەکارهێنەری ب React و Next.js.</p>
                 </div>
                 
+                <div class="tech-node">
+                    <h4>Cloud Infrastructure</h4>
+                    <p>بکارئینانا AWS و Docker بۆ میوانداریکرنا پڕۆژان.</p>
+                </div>
             </div>
         </div>
 
-        <div class="core-card">
-            <h2 id="c2-t"><i class="fas fa-brain"></i> AI Neural Lab</h2>
-            <p id="c2-d">فێربوونا مێشکێ دەستکرد و سیستەمێن زیرەک.</p>
-            <button class="btn-expand" onclick="toggleSub('ai-sub')" id="b2">OPEN LAB</button>
+        <div class="crystal-card">
+            <h2><i class="fas fa-brain"></i> Neural Network</h2>
+            <p style="color: #94a3b8;">زیرەکییا دەستکرد و مۆدێلێن فێربوونا کوور.</p>
+            <button class="action-btn" onclick="toggleDepth('ai-depth')">INITIATE AI</button>
             
-            <div id="ai-sub" class="sub-sections">
-                <div class="sub-item">
-                    <h4>Machine Learning</h4>
-                    <p>فێرکرنا کۆمپیۆتەری ژ داتایان.</p>
+            <div id="ai-depth" class="depth-content">
+                <div class="tech-node">
+                    <h4>Natural Language</h4>
+                    <p>چەوا کۆمپیۆتەر د زمانێ مرۆڤی دگەهیت.</p>
                 </div>
                 
-                <div class="sub-item">
-                    <h4>Deep Learning</h4>
-                    <p>تۆڕێن عەسەبی و ناسینا وێنەیان.</p>
+                <div class="tech-node">
+                    <h4>Computer Vision</h4>
+                    <p>ناسینا وێنە و ڤیدیۆیان ب شێوەیەکێ ئۆتۆماتیکی.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- STARFIELD ANIMATION ---
-        const canvas = document.getElementById('star-canvas');
+        // --- 3D STARFIELD ENGINE ---
+        const canvas = document.getElementById('starCanvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
-        function init() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const starCount = 450;
+
+        function initStars() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             stars = [];
-            for (let i = 0; i < 400; i++) {
-                stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width });
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width - canvas.width / 2,
+                    y: Math.random() * canvas.height - canvas.height / 2,
+                    z: Math.random() * canvas.width,
+                    o: Math.random()
+                });
             }
         }
-        function draw() {
-            ctx.fillStyle = "black"; ctx.fillRect(0,0,canvas.width, canvas.height);
-            ctx.fillStyle = "white";
+
+        function drawStars() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
             stars.forEach(s => {
-                s.z -= 2;
+                s.z -= 1.5; // Speed of movement
                 if (s.z <= 0) s.z = canvas.width;
-                let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
-                let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
-                let size = (1 - s.z/canvas.width) * 3;
-                ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
+
+                let sx = (s.x / s.z) * canvas.width + canvas.width / 2;
+                let sy = (s.y / s.z) * canvas.height + canvas.height / 2;
+                let size = (1 - s.z / canvas.width) * 2.5;
+
+                ctx.fillStyle = `rgba(0, 242, 254, ${1 - s.z/canvas.width})`;
+                ctx.beginPath();
+                ctx.arc(sx, sy, size, 0, Math.PI * 2);
+                ctx.fill();
             });
-            requestAnimationFrame(draw);
+            requestAnimationFrame(drawStars);
         }
-        init(); draw();
 
-        // --- INTERACTIVE LOGIC ---
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        window.addEventListener('resize', initStars);
+        initStars(); drawStars();
+
+        // --- DASHBOARD LOGIC ---
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         
-        function toggleSub(id) {
+        function toggleDepth(id) {
             const el = document.getElementById(id);
-            el.style.display = el.style.display === 'block' ? 'none' : 'block';
-        }
-
-        const trans = {
-            ku: { c1t: "Web Core System", c1d: "هەمی تشت دەربارەی ئاڤاکرنا وێبسایتێن پێشکەفتی.", b1: "کۆلینێ بکە", dir: "rtl" },
-            en: { c1t: "Web Core System", c1d: "Everything about building advanced websites.", b1: "EXPLORE DEPTHS", dir: "ltr" }
-        };
-
-        function setLang(l) {
-            const d = trans[l];
-            document.getElementById('main').setAttribute('dir', d.dir);
-            document.getElementById('c1-t').innerText = d.c1t;
-            document.getElementById('c1-d').innerText = d.c1d;
-            document.getElementById('b1').innerText = d.b1;
-            toggleSidebar();
+            const isVisible = el.style.display === 'block';
+            document.querySelectorAll('.depth-content').forEach(d => d.style.display = 'none');
+            el.style.display = isVisible ? 'none' : 'block';
         }
     </script>
 </body>
