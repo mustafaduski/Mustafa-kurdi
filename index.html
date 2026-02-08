@@ -3,166 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mustafa | The Master Architect</title>
+    <title>Mustafa | Visual Architect</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --neon: #00f2fe; --purple: #bc13fe; --dark: #000205; }
-        
+        :root { --neon: #00f2fe; --glow: rgba(0, 242, 254, 0.5); --dark-base: #00050a; }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
-            margin: 0; padding: 0; background: var(--dark); color: white;
-            font-family: 'Consolas', 'Segoe UI', sans-serif; overflow: hidden; height: 100vh;
+            margin: 0; padding: 0; background: var(--dark-base); color: white;
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
         }
 
-        /* Galactic Warp Background */
-        #warp-bg { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* Moving Space Background */
+        #space-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Top Bar System */
+        /* Sleek Top Header */
         header {
-            position: fixed; top: 0; width: 100%; height: 65px;
+            position: fixed; top: 0; width: 100%; height: 70px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 25px; background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(25px); z-index: 1000;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.3);
+            padding: 0 25px; background: rgba(0, 5, 10, 0.6);
+            backdrop-filter: blur(20px); z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .os-logo { font-weight: 900; letter-spacing: 4px; font-size: 1.1rem; color: var(--neon); }
-        .burger-menu { font-size: 1.8rem; color: var(--neon); cursor: pointer; }
+        .menu-icon { font-size: 1.8rem; color: var(--neon); cursor: pointer; transition: 0.3s; }
+        .logo { font-weight: 800; letter-spacing: 3px; font-size: 1.2rem; text-shadow: 0 0 10px var(--neon); }
 
-        /* Full-Screen Hologram Nav */
-        .hologram-nav {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98);
-            z-index: 2000; display: flex; flex-direction: column; 
+        /* Infinite Scroller for Visual Content */
+        .content-wrapper { padding: 90px 15px 40px; }
+
+        .visual-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px; margin-bottom: 30px; overflow: hidden;
+            backdrop-filter: blur(15px); transition: 0.4s ease;
+        }
+        .visual-card:hover { border-color: var(--neon); transform: translateY(-5px); }
+
+        .image-container { width: 100%; position: relative; border-bottom: 1px solid rgba(0, 242, 254, 0.2); }
+        .image-container img { width: 100%; display: block; border-radius: 30px 30px 0 0; }
+
+        .card-info { padding: 25px; }
+        .card-info h2 { color: var(--neon); margin: 0 0 10px 0; font-size: 1.6rem; }
+        .card-info p { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; }
+
+        /* Full Menu Overlay */
+        .overlay-menu {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
+            z-index: 2000; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: 0.6s;
+            transform: translateX(100%); transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
         }
-        .hologram-nav.active { opacity: 1; pointer-events: auto; }
-        .nav-item { font-size: 2rem; color: white; margin: 20px; text-decoration: none; border-left: 4px solid var(--neon); padding-left: 20px; }
+        .overlay-menu.open { transform: translateX(0); }
 
-        /* Main Dashboard UI */
-        .dashboard {
-            height: 100vh; overflow-y: auto; padding: 100px 20px 40px;
-            display: grid; grid-template-columns: 1fr; gap: 20px;
-        }
+        .nav-link { font-size: 2.2rem; color: white; text-decoration: none; margin: 15px; font-weight: 700; transition: 0.3s; }
+        .nav-link:hover { color: var(--neon); text-shadow: 0 0 20px var(--neon); }
 
-        .crystal-node {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; padding: 30px; backdrop-filter: blur(20px);
-            position: relative; overflow: hidden; transition: 0.4s;
-        }
-        .crystal-node::before {
-            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0,242,254,0.1) 0%, transparent 70%);
-        }
-
-        .node-icon { font-size: 2.5rem; color: var(--neon); margin-bottom: 15px; text-shadow: 0 0 20px var(--neon); }
-
-        /* Progress Bars for Skills */
-        .skill-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 15px; }
-        .skill-fill { height: 100%; background: var(--neon); box-shadow: 0 0 15px var(--neon); border-radius: 10px; width: 0; transition: 2s; }
-
-        /* Floating Console */
-        .terminal-log {
-            background: rgba(0,0,0,0.7); border-radius: 15px; padding: 15px;
-            font-size: 0.7rem; color: #4facfe; border: 1px solid rgba(0,242,254,0.2);
-            margin-top: 20px; font-family: monospace;
-        }
+        /* Loading Animation */
+        .loader { height: 2px; background: var(--neon); width: 0; position: fixed; top: 70px; z-index: 1001; transition: 1s; }
     </style>
 </head>
-<body onload="animateSkills()">
+<body onload="document.querySelector('.loader').style.width = '100%'">
 
-    <canvas id="warp-bg"></canvas>
+    <div class="loader"></div>
+    <canvas id="space-canvas"></canvas>
 
     <header>
-        <div class="os-logo">MUSTAFA<span style="color:white">_ARCHITECT</span></div>
-        <div class="burger-menu" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
+        <div class="menu-icon" onclick="toggleNav()"><i class="fas fa-bars-staggered"></i></div>
+        <div class="logo">MUSTAFA.OS</div>
     </header>
 
-    <nav class="hologram-nav" id="menu">
-        <div onclick="toggleMenu()" style="position:absolute; top:20px; right:30px; font-size:2.5rem;"><i class="fas fa-xmark"></i></div>
-        <a href="#" class="nav-item">SOFTWARE_ENGINEERING</a>
-        <a href="#" class="nav-item">GAME_MECHANICS</a>
-        <a href="#" class="nav-item">CYBER_SECURITY</a>
-        <a href="#" class="nav-item">UI_ARCHITECTURE</a>
+    <nav class="overlay-menu" id="nav">
+        <div class="menu-icon" onclick="toggleNav()" style="position:absolute; top:20px; right:30px;"><i class="fas fa-times"></i></div>
+        <a href="#" class="nav-link">WEB CORE</a>
+        <a href="#" class="nav-link">GAME ENGINE</a>
+        <a href="#" class="nav-link">UI ARCHITECT</a>
+        <a href="#" class="nav-link">CYBER LOGIC</a>
     </nav>
 
-    <div class="dashboard">
-        <div class="crystal-node">
-            <div class="node-icon"><i class="fas fa-layer-group"></i></div>
-            <h2 style="margin:0">WEB ARCHITECTURE</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">ئاڤاکرنا سیستەمێن وێبێ یێن ئاڵۆز و سێرڤەران.</p>
-            
-            
-            
-            <div class="skill-bar"><div class="skill-fill" data-width="95%"></div></div>
-            <div class="terminal-log">> STATUS: OPTIMIZED<br>> UPTIME: 99.9%</div>
+    <div class="content-wrapper">
+        
+        <div class="visual-card">
+            <div class="image-container">
+                
+            </div>
+            <div class="card-info">
+                <h2>Web System Architect</h2>
+                <p>ئەز سیستەمێن وێبێ یێن ئاڵۆز ئاڤا دکەم، ژ "Frontend"ێ هەتا دگەهیتە "Cloud Infrastructure".</p>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <span style="background:rgba(0,242,254,0.1); padding:5px 12px; border-radius:20px; font-size:0.7rem; border:1px solid var(--neon)">REACT</span>
+                    <span style="background:rgba(0,242,254,0.1); padding:5px 12px; border-radius:20px; font-size:0.7rem; border:1px solid var(--neon)">NODE.JS</span>
+                </div>
+            </div>
         </div>
 
-        <div class="crystal-node">
-            <div class="node-icon"><i class="fas fa-vr-cardboard"></i></div>
-            <h2 style="margin:0">GAME ENGINEERING</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">پەرەپێدانا یارییان ب Unreal Engine و C++.</p>
-            
-            
-            
-            <div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div>
-            <div class="terminal-log">> ENGINE: ACTIVE<br>> ASSETS: LOADED</div>
+        <div class="visual-card">
+            <div class="image-container">
+                
+            </div>
+            <div class="card-info">
+                <h2>Game Engine Mechanics</h2>
+                <p>پەرەپێدانا جیهانێن یارییان ب فیزیا و لۆژیکەکێ پێشکەفتی ب کارئینانا Unreal Engine.</p>
+            </div>
         </div>
-        
-        <div class="crystal-node">
-            <div class="node-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-            <h2 style="margin:0">FUTURISTIC DESIGN</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">داهێنانا دیزاینێن سێ-رەهەندی و ئەزموونا بەکارهێنەری.</p>
-            
-            
-            
-            <div class="skill-bar"><div class="skill-fill" data-width="92%"></div></div>
-            <div class="terminal-log">> RENDER: HIGH_POLY<br>> DESIGN: QUANTUM</div>
+
+        <div class="visual-card">
+            <div class="image-container">
+                
+            </div>
+            <div class="card-info">
+                <h2>UI/UX Roadmap</h2>
+                <p>نەخشەیێ فێربوون و بجهئینانا دیزاینێن مۆدێرن و کارلێکەر بۆ هەمی پلاتفۆڕمان.</p>
+            </div>
         </div>
+
     </div>
 
     <script>
-        // --- 3D HYPER-DRIVE BACKGROUND ---
-        const canvas = document.getElementById('warp-bg');
+        // --- STARFIELD INTERACTIVE ENGINE ---
+        const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
+        let mouseX = 0, mouseY = 0;
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             stars = [];
-            for (let i = 0; i < 400; i++) {
+            for (let i = 0; i < 250; i++) {
                 stars.push({
-                    x: Math.random() * canvas.width - canvas.width / 2,
-                    y: Math.random() * canvas.height - canvas.height / 2,
-                    z: Math.random() * canvas.width
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    z: Math.random() * canvas.width,
+                    o: Math.random()
                 });
             }
         }
 
         function draw() {
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "#00050a";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
             stars.forEach(s => {
-                s.z -= 2;
+                s.z -= 0.8;
                 if (s.z <= 0) s.z = canvas.width;
-                let sx = (s.x / s.z) * canvas.width + canvas.width / 2;
-                let sy = (s.y / s.z) * canvas.height + canvas.height / 2;
-                let size = (1 - s.z / canvas.width) * 3;
+
+                let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+                let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+
+                // Subtle parallax based on screen position
+                sx += (mouseX - canvas.width/2) * 0.02;
+                sy += (mouseY - canvas.height/2) * 0.02;
+
+                let size = (1 - s.z / canvas.width) * 2.5;
                 ctx.fillStyle = `rgba(0, 242, 254, ${1 - s.z/canvas.width})`;
-                ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath();
+                ctx.arc(sx, sy, size, 0, Math.PI * 2);
+                ctx.fill();
             });
             requestAnimationFrame(draw);
         }
 
-        function toggleMenu() { document.getElementById('menu').classList.toggle('active'); }
+        function toggleNav() { document.getElementById('nav').classList.toggle('open'); }
 
-        function animateSkills() {
-            document.querySelectorAll('.skill-fill').forEach(bar => {
-                bar.style.width = bar.getAttribute('data-width');
-            });
-        }
-
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
         window.addEventListener('resize', init);
         init(); draw();
     </script>
