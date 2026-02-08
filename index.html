@@ -2,145 +2,122 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mustafa | Studio Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mustafa | High-End Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --neon: #00f2fe; --white: #ffffff; --dark: #050505; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --neon: #00f2fe; --white: #ffffff; --bg: #000000; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background-color: var(--dark); color: var(--white);
-            font-family: 'Inter', sans-serif; overflow-x: hidden;
+            background: var(--bg); color: var(--white);
+            font-family: 'Space Grotesk', sans-serif; overflow-x: hidden;
         }
 
-        /* Galactic Background */
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* 3D Space Background */
+        #main-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Navigation */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 25px 40px;
+        /* Professional Header */
+        header {
+            position: fixed; top: 0; width: 100%; height: 80px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            padding: 0 30px; z-index: 1000; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; color: var(--neon); }
-        .menu-btn { font-size: 1.8rem; cursor: pointer; color: var(--white); }
+
+        .logo { font-weight: 700; font-size: 1.4rem; letter-spacing: -1px; }
+        .burger { cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
+        .burger span { width: 30px; height: 2px; background: var(--white); transition: 0.4s; }
 
         /* Hero Section */
         .hero {
             height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            padding: 20px; position: relative;
+            justify-content: center; align-items: flex-start; padding: 0 30px;
         }
         .hero h1 { 
-            font-size: 4rem; text-transform: uppercase; line-height: 1;
-            background: linear-gradient(to bottom, #fff, #666);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            font-size: clamp(3rem, 10vw, 6rem); font-weight: 700; line-height: 0.9;
+            margin-bottom: 20px; text-transform: uppercase;
         }
-        .hero p { font-size: 1.2rem; color: var(--neon); letter-spacing: 4px; }
+        .hero p { color: var(--neon); font-size: 0.9rem; letter-spacing: 5px; font-weight: 300; }
 
-        /* Professional Showreel (Wix Style) */
-        .section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        /* Dashboard Grid - The Masterpiece */
+        .dashboard { padding: 50px 20px; display: grid; grid-template-columns: 1fr; gap: 20px; }
         
-        .work-card {
-            position: relative; border-radius: 40px; overflow: hidden;
-            margin-bottom: 60px; border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.02); backdrop-filter: blur(20px);
-            transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+        .card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px; padding: 40px; position: relative;
+            overflow: hidden; backdrop-filter: blur(20px); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .work-card:hover { transform: scale(1.02); border-color: var(--neon); }
 
-        .work-image { width: 100%; height: 400px; overflow: hidden; position: relative; }
-        .work-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .card:hover { border-color: var(--neon); background: rgba(255, 255, 255, 0.06); }
+        
+        .card i { font-size: 3rem; color: var(--neon); margin-bottom: 25px; display: block; }
+        .card h2 { font-size: 2rem; margin-bottom: 15px; font-weight: 500; }
+        .card p { color: #888; line-height: 1.6; font-size: 1rem; }
 
-        .work-content { padding: 40px; }
-        .work-content h2 { font-size: 2.5rem; margin-bottom: 15px; }
-        .work-content p { color: #aaa; font-size: 1.1rem; line-height: 1.7; }
-
-        /* Custom UI Buttons */
-        .btn-pro {
-            display: inline-block; margin-top: 25px; padding: 15px 35px;
-            border: 1px solid var(--neon); color: var(--neon);
-            text-decoration: none; border-radius: 50px; font-weight: 600;
-            transition: 0.3s;
-        }
-        .btn-pro:hover { background: var(--neon); color: #000; box-shadow: 0 0 30px var(--neon); }
-
-        /* Full Overlay Menu */
-        .menu-overlay {
+        /* Floating Nav Overlay */
+        .nav-overlay {
             position: fixed; inset: 0; background: #000; z-index: 2000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            clip-path: circle(0% at 90% 10%); transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+            opacity: 0; pointer-events: none; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .menu-overlay.active { clip-path: circle(150% at 90% 10%); }
-        .menu-link { font-size: 3rem; color: white; text-decoration: none; margin: 15px; font-weight: 800; }
-        .menu-link:hover { -webkit-text-stroke: 1px var(--neon); color: transparent; }
+        .nav-overlay.active { opacity: 1; pointer-events: auto; }
+        .nav-link { font-size: 3rem; color: white; text-decoration: none; margin: 15px; font-weight: 700; transition: 0.3s; }
+        .nav-link:hover { color: var(--neon); padding-right: 20px; }
 
+        /* Action Button */
+        .cta {
+            margin-top: 30px; display: inline-flex; align-items: center; gap: 10px;
+            color: var(--neon); text-decoration: none; font-weight: 700; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="main-canvas"></canvas>
 
-    <nav>
-        <div class="logo">MUSTAFA.STUDIO</div>
-        <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
+    <header>
+        <div class="logo">MUSTAFA.<span style="color:var(--neon)">PRO</span></div>
+        <div class="burger" onclick="toggleNav()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="nav-overlay" id="overlay">
+        <div onclick="toggleNav()" style="position:absolute; top:30px; left:30px; font-size:2rem;"><i class="fas fa-times"></i></div>
+        <a href="#" class="nav-link">ARCHITECT</a>
+        <a href="#" class="nav-item nav-link">WEB_CORE</a>
+        <a href="#" class="nav-item nav-link">GAME_DEV</a>
+        <a href="#" class="nav-item nav-link">CONTACT</a>
     </nav>
 
-    <div class="menu-overlay" id="overlay">
-        <div class="menu-btn" onclick="toggleMenu()" style="position:absolute; top:30px; left:30px;"><i class="fas fa-xmark"></i></div>
-        <a href="#" class="menu-link">STRATEGY</a>
-        <a href="#" class="menu-link">CODING</a>
-        <a href="#" class="menu-link">GAMING</a>
-        <a href="#" class="menu-link">CONTACT</a>
-    </div>
+    <section class="hero">
+        <p>DIGITAL ARCHITECT</p>
+        <h1>BEYOND<br>THE VOID</h1>
+    </section>
 
-    <div class="hero">
-        <h1>THE ARCHITECT</h1>
-        <p>WEB • DESIGN • CODE • GAMES</p>
-    </div>
-
-    <div class="section">
-        
-        <div class="work-card">
-            <div class="work-image">
-                
-            </div>
-            <div class="work-content">
-                <h2>SYSTEM ARCHITECTURE</h2>
-                <p>ئەڤە لایەنێ هەرە بهێزێ کارێ منە؛ دروستکرنا وێبسایتێن گرانبەها ب ستایلێ Wix Studio کو پشت ب سێرڤەرێن ئاست بلند دبەستن.</p>
-                <a href="#" class="btn-pro">VIEW PROJECT</a>
-            </div>
+    <div class="dashboard">
+        <div class="card">
+            <i class="fas fa-code-merge"></i>
+            <h2>WEB CORE</h2>
+            <p>ئاڤاکرنا سیستەمێن وێبێ یێن ئاڵۆز ب ستایلێ Wix Studio و ئەزموونا بەکارهێنەری یا بێ وێنە.</p>
+            <a href="#" class="cta">Explore Engineering <i class="fas fa-arrow-left"></i></a>
         </div>
 
-        <div class="work-card">
-            <div class="work-image">
-                
-            </div>
-            <div class="work-content">
-                <h2>GAME ENGINE DESIGN</h2>
-                <p>پەرەپێدانا میکانیکێن یارییان و گرافیکێن سێ رەهەندی کو خەیالا مرۆڤی دگوهۆرن.</p>
-                <a href="#" class="btn-pro">ENTER WORLD</a>
-            </div>
+        <div class="card">
+            <i class="fas fa-rocket"></i>
+            <h2>GAME LOGIC</h2>
+            <p>پەرەپێدانا میکانیکێن یارییان ب شێوازێ 3D و لۆژیکەکێ پێشکەفتی یێ پڕۆگرامینگێ.</p>
+            <a href="#" class="cta">Initiate Engine <i class="fas fa-arrow-left"></i></a>
         </div>
-
-        <div class="work-card">
-            <div class="work-image">
-                
-            </div>
-            <div class="work-content">
-                <h2>DEVELOPMENT ROADMAP</h2>
-                <p>نەخشەیێ گەشتەکا زانستی د ناڤ جیهانا کۆدینگێ دا، ژ دەستپێکێ هەتا دبیە شارەزا.</p>
-                <a href="#" class="btn-pro">LEARN MORE</a>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        // --- LUXURY STARFIELD ENGINE ---
-        const canvas = document.getElementById('bg-canvas');
+        // --- 3D INTERACTIVE SPACE ENGINE ---
+        const canvas = document.getElementById('main-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
 
@@ -148,32 +125,31 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             stars = [];
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 400; i++) {
                 stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    z: Math.random() * canvas.width,
-                    size: Math.random() * 2
+                    x: Math.random() * canvas.width - canvas.width / 2,
+                    y: Math.random() * canvas.height - canvas.height / 2,
+                    z: Math.random() * canvas.width
                 });
             }
         }
 
         function draw() {
-            ctx.fillStyle = "#050505";
+            ctx.fillStyle = "black";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             stars.forEach(s => {
-                s.z -= 0.5;
+                s.z -= 1.5; // Smooth speed
                 if (s.z <= 0) s.z = canvas.width;
-                let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
-                let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
-                let size = (1 - s.z/canvas.width) * 3;
+                let sx = (s.x / s.z) * canvas.width + canvas.width / 2;
+                let sy = (s.y / s.z) * canvas.height + canvas.height / 2;
+                let size = (1 - s.z/canvas.width) * 2;
                 ctx.fillStyle = `rgba(255, 255, 255, ${1 - s.z/canvas.width})`;
                 ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(draw);
         }
 
-        function toggleMenu() { document.getElementById('overlay').classList.toggle('active'); }
+        function toggleNav() { document.getElementById('overlay').classList.toggle('active'); }
 
         window.addEventListener('resize', init);
         init(); draw();
