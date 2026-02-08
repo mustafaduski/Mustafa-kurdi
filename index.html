@@ -3,191 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mustafa | Infinite Reality</title>
+    <title>Mustafa | The Architect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --neon: #00f2fe; --magical: #ff00ff; --deep: #000205; }
-        
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --neon-blue: #00f2fe; --neon-purple: #9d50bb; --bg-dark: #000; }
+
         body, html { 
-            margin: 0; padding: 0; background: var(--deep); color: white;
-            font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100vh;
+            margin: 0; padding: 0; background: var(--bg-dark); color: white;
+            font-family: 'Consolas', monospace; overflow: hidden; height: 100vh;
         }
 
-        #canvas-web { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* 3D Hyper-Drive Background */
+        #warpCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Floating Crystal Header */
-        header {
-            position: fixed; top: 20px; width: 90%; left: 5%;
-            height: 60px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 25px; background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px); z-index: 1000;
-            border-radius: 50px; border: 1px solid rgba(0, 242, 254, 0.3);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        /* Top Status Bar */
+        .status-bar {
+            position: fixed; top: 0; width: 100%; height: 40px;
+            background: rgba(0, 242, 254, 0.1); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; font-size: 0.8rem; border-bottom: 1px solid var(--neon-blue);
+            z-index: 1000;
         }
 
-        .burger { width: 30px; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
-        .burger span { height: 2px; width: 100%; background: var(--neon); border-radius: 2px; transition: 0.4s; }
-
-        /* Full Screen Galactic Menu */
-        .nebula-menu {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
-            z-index: 2000; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center;
-            clip-path: circle(0% at 10% 10%); transition: 0.8s cubic-bezier(0.9, 0, 0.1, 1);
-        }
-        .nebula-menu.active { clip-path: circle(150% at 10% 10%); }
-
-        /* Liquid Content Modules */
-        .scroller {
-            height: 100vh; overflow-y: auto; padding: 120px 20px 50px;
-            scroll-snap-type: y mandatory;
+        /* Side Menu Icon (3 Lines) */
+        .menu-launcher {
+            font-size: 1.5rem; color: var(--neon-blue); cursor: pointer;
+            text-shadow: 0 0 10px var(--neon-blue);
         }
 
-        .module {
-            min-height: 80vh; margin-bottom: 50px; scroll-snap-align: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 40px; backdrop-filter: blur(15px);
-            padding: 40px; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            animation: float 6s ease-in-out infinite;
-            position: relative; overflow: hidden;
+        /* Main Dashboard Grid */
+        .grid-container {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+            padding: 60px 20px 20px; height: 100vh;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(1deg); }
+        .hexagon-module {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 242, 254, 0.3);
+            backdrop-filter: blur(15px); border-radius: 15px; position: relative;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.4s; overflow: hidden;
         }
 
-        .module h2 { font-size: 2.5rem; color: var(--neon); text-shadow: 0 0 15px var(--neon); }
-        
-        /* Interactive Data Flow */
-        .data-stream {
-            font-family: monospace; font-size: 0.7rem; color: var(--magical);
-            opacity: 0.4; position: absolute; pointer-events: none;
+        .hexagon-module:hover {
+            background: rgba(0, 242, 254, 0.1); border-color: var(--neon-blue);
+            transform: scale(1.03); box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
         }
 
-        .btn-pulse {
-            background: transparent; border: 2px solid var(--neon);
-            color: white; padding: 15px 40px; border-radius: 50px;
-            font-weight: bold; text-transform: uppercase; margin-top: 20px;
-            box-shadow: 0 0 15px var(--neon); animation: pulse 2s infinite;
+        .hexagon-module i { font-size: 2.5rem; color: var(--neon-blue); margin-bottom: 10px; }
+
+        /* System Logs at Bottom */
+        .system-logs {
+            position: fixed; bottom: 0; width: 100%; height: 80px;
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--neon-purple);
+            padding: 10px 20px; font-size: 0.7rem; color: #4facfe;
+            overflow: hidden; pointer-events: none;
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 5px var(--neon); }
-            50% { box-shadow: 0 0 25px var(--neon); }
-            100% { box-shadow: 0 0 5px var(--neon); }
+        /* Sidebar Overlay */
+        .sidebar {
+            position: fixed; top: 0; left: -100%; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000; transition: 0.5s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
+        .sidebar.active { left: 0; }
+
+        .nav-link { font-size: 2rem; color: white; margin: 20px; text-decoration: none; border-bottom: 2px solid var(--neon-blue); }
+
+        /* Animation Classes */
+        .pulse { animation: pulseAnim 2s infinite; }
+        @keyframes pulseAnim { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas-web"></canvas>
+    <canvas id="warpCanvas"></canvas>
 
-    <header>
-        <div class="burger" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
+    <div class="status-bar">
+        <span>CORE: ACTIVE</span>
+        <div class="menu-launcher" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
+        <span>SYSTEM_V.9.0</span>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div onclick="toggleMenu()" style="position:absolute; top:20px; left:20px; font-size:2rem;"><i class="fas fa-times"></i></div>
+        <a href="#" class="nav-link">PROGRAMMING</a>
+        <a href="#" class="nav-link">GAME DESIGN</a>
+        <a href="#" class="nav-link">UI/UX MASTER</a>
+        <a href="#" class="nav-link">DATABASE</a>
+    </nav>
+
+    <div class="grid-container">
+        <div class="hexagon-module">
+            <i class="fas fa-code"></i>
+            <h4 style="margin:0">کۆدینگ</h4>
+            <span style="font-size:0.6rem; opacity:0.6">FULL-STACK MASTER</span>
         </div>
-        <div style="font-weight: 900; letter-spacing: 3px; font-size: 1.2rem;">MUSTAFA<span style="color:var(--neon)">.VOID</span></div>
-    </header>
 
-    <div class="nebula-menu" id="menu">
-        <h1 style="color:var(--neon); font-size: 3rem;" onclick="toggleMenu()">CLOSE</h1>
-        <div style="display:flex; flex-direction:column; gap:20px; font-size:1.5rem;">
-            <div onclick="toggleMenu()">01_WEB_DIMENSION</div>
-            <div onclick="toggleMenu()">02_AI_NEURAL_LINK</div>
-            <div onclick="toggleMenu()">03_CYBER_MATRIX</div>
+        <div class="hexagon-module">
+            <i class="fas fa-gamepad"></i>
+            <h4 style="margin:0">یاری</h4>
+            <span style="font-size:0.6rem; opacity:0.6">UNREAL ENGINE 5</span>
+        </div>
+
+        <div class="hexagon-module">
+            <i class="fas fa-bezier-curve"></i>
+            <h4 style="margin:0">دیزاین</h4>
+            <span style="font-size:0.6rem; opacity:0.6">FUTURISTIC UI</span>
+        </div>
+
+        <div class="hexagon-module">
+            <i class="fas fa-shield-virus"></i>
+            <h4 style="margin:0">ئاساییش</h4>
+            <span style="font-size:0.6rem; opacity:0.6">CYBER SECURITY</span>
         </div>
     </div>
 
-    <div class="scroller">
-        <div class="module">
-            <h2>WEB CORE</h2>
-            <p style="text-align: center; color: #ccc;">ئەڤە لایەنێ ئاڤاکرنا گەردوونێن دیجیتاڵی یە. هەمی تشت لێرە د لڤن.</p>
-            <div class="data-stream" style="top:10%; left:5%;">01011100101</div>
-            <div class="data-stream" style="bottom:15%; right:10%;">SYSTEM_BOOT_SUCCESS</div>
-            
-            <button class="btn-pulse">ENGAGE MODULE</button>
-            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">Scroll down to dive deeper</p>
-        </div>
-
-        <div class="module">
-            <h2>NEURAL LINK</h2>
-            <p style="text-align: center; color: #ccc;">فێربوونا مێشکێ دەستکرد کو دگەل هەستێن تە کار دکەت.</p>
-            <div class="btn-pulse">SYNC NEURONS</div>
-        </div>
+    <div class="system-logs" id="logs">
+        > INITIALIZING SYSTEM...<br>
+        > LOADING GRAPHICS ENGINE...<br>
+        > MUSTAFA OS READY_
     </div>
 
     <script>
-        const canvas = document.getElementById('canvas-web');
+        // --- HYPER-SPEED CANVAS ---
+        const canvas = document.getElementById('warpCanvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
-
-        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
-        window.addEventListener('touchmove', (e) => { 
-            mouse.x = e.touches[0].clientX; 
-            mouse.y = e.touches[0].clientY; 
-        });
+        let stars = [];
+        const numStars = 500;
+        let speed = 5;
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 120; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 1,
-                    baseX: Math.random() * canvas.width,
-                    baseY: Math.random() * canvas.height,
-                    density: (Math.random() * 30) + 1,
-                    color: Math.random() > 0.5 ? '#00f2fe' : '#ff00ff'
-                });
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, z: Math.random() * canvas.width });
             }
         }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                // Gravity Logic
-                let dx = mouse.x - p.x;
-                let dy = mouse.y - p.y;
-                let distance = Math.sqrt(dx*dx + dy*dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = forceDirectionX * force * p.density;
-                let directionY = forceDirectionY * force * p.density;
-
-                if (distance < mouse.radius) {
-                    p.x -= directionX;
-                    p.y -= directionY;
-                } else {
-                    if (p.x !== p.baseX) {
-                        let dx = p.x - p.baseX;
-                        p.x -= dx/10;
-                    }
-                    if (p.y !== p.baseY) {
-                        let dy = p.y - p.baseY;
-                        p.y -= dy/10;
-                    }
-                }
-
-                ctx.fillStyle = p.color;
+        function draw() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            stars.forEach(s => {
+                s.z -= speed;
+                if (s.z <= 0) s.z = canvas.width;
+                let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+                let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+                let size = (1 - s.z/canvas.width) * 4;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.arc(sx, sy, size, 0, Math.PI*2);
                 ctx.fill();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(draw);
         }
 
-        function toggleMenu() { document.getElementById('menu').classList.toggle('active'); }
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+
+        // Live Logs Effect
+        setInterval(() => {
+            const logs = document.getElementById('logs');
+            const newLog = document.createElement('div');
+            newLog.innerHTML = `> SYNCING DATA: ${Math.random().toString(16).substr(2, 8)}... SUCCESS`;
+            logs.appendChild(newLog);
+            if (logs.children.length > 5) logs.removeChild(logs.firstChild);
+        }, 2000);
 
         window.addEventListener('resize', init);
-        init(); animate();
+        init(); draw();
     </script>
 </body>
 </html>
