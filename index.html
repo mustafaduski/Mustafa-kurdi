@@ -1,145 +1,167 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ku" dir="rtl" id="mainHtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mustafa Kurdi | پلاتفۆڕما فێربوونا گشتگیر</title>
+    <title>Mustafa Tech Elite</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #0b0e14;
-            --sidebar-bg: #151921;
-            --accent: #00e5ff;
-            --text-main: #e2e8f0;
-            --glass: rgba(255, 255, 255, 0.03);
+            --primary: #00f2fe;
+            --accent: #7117ea;
+            --bg: #030712;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif;
-            background: var(--bg-dark); color: var(--text-main);
-            display: flex; height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; background: var(--bg); color: white;
+            font-family: 'Segoe UI', sans-serif; overflow-x: hidden;
         }
 
-        /* Sidebar Custom Styling */
-        .sidebar {
-            width: 260px; background: var(--sidebar-bg);
-            border-left: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-direction: column; padding: 20px;
+        /* Ambient Background */
+        .ambient-light {
+            position: fixed; top: -50px; left: -50px; width: 300px; height: 300px;
+            background: var(--primary); filter: blur(120px); opacity: 0.2; z-index: -1;
         }
 
-        .sidebar h2 { color: var(--accent); font-size: 1.2rem; margin-bottom: 30px; text-align: center; border-bottom: 1px solid var(--glass); padding-bottom: 10px; }
-
-        .nav-item {
-            padding: 12px 15px; margin: 5px 0; border-radius: 10px;
-            cursor: pointer; display: flex; align-items: center; gap: 12px;
-            transition: 0.3s; color: #94a3b8; text-decoration: none;
+        /* Top Header */
+        header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--glass);
         }
 
-        .nav-item:hover, .nav-item.active {
-            background: var(--accent); color: #000; font-weight: bold;
+        .lang-btn {
+            background: var(--glass); border: 1px solid var(--primary); color: white;
+            padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; cursor: pointer;
         }
 
-        /* Main Content Area */
-        .main-content { flex: 1; overflow-y: auto; padding: 40px; position: relative; }
-
-        .page-content { display: none; animation: fadeIn 0.5s ease; }
-        .page-content.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Tech Card Design */
-        .code-block {
-            background: #011627; padding: 20px; border-radius: 10px;
-            border-right: 4px solid var(--accent); font-family: 'Courier New', Courier, monospace;
-            margin: 20px 0; direction: ltr; text-align: left;
+        /* Mobile Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: rgba(3, 7, 18, 0.95);
+            display: flex; justify-content: space-around; padding: 15px 0;
+            backdrop-filter: blur(20px); border-top: 1px solid var(--glass); z-index: 1000;
         }
 
-        .grid-tech { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .tech-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; }
+        .nav-item { color: #64748b; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); transform: translateY(-5px); }
 
-        .btn-lang { position: absolute; top: 20px; left: 20px; background: var(--accent); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* Main Content */
+        .container { padding: 20px; padding-bottom: 100px; }
+        .page { display: none; animation: slideUp 0.4s ease-out; }
+        .page.active { display: block; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Learning Cards */
+        .card {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px; padding: 25px; margin-bottom: 20px;
+            backdrop-filter: blur(10px); position: relative; overflow: hidden;
+        }
+
+        .card::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+
+        h2 { font-size: 1.8rem; margin-bottom: 10px; color: var(--primary); }
+        p { color: #94a3b8; line-height: 1.6; }
+
+        .code-preview {
+            background: #000; padding: 15px; border-radius: 15px;
+            font-family: monospace; font-size: 0.9rem; color: #a5f3fc;
+            direction: ltr; text-align: left; margin-top: 15px; border: 1px solid #1e293b;
+        }
+
+        /* Buttons */
+        .action-btn {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border: none; padding: 12px 25px; border-radius: 50px;
+            color: white; font-weight: bold; width: 100%; margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2>MUSTAFA ACADEMY</h2>
-        <div class="nav-item active" onclick="showPage('home')"><i class="fas fa-home"></i> سەرەکی</div>
-        <div class="nav-item" onclick="showPage('html')"><i class="fab fa-html5"></i> فێربوونا HTML</div>
-        <div class="nav-item" onclick="showPage('css')"><i class="fab fa-css3-alt"></i> دیزاین ب CSS</div>
-        <div class="nav-item" onclick="showPage('js')"><i class="fab fa-js"></i> پرۆگرامینگ ب JS</div>
-        <div class="nav-item" onclick="showPage('python')"><i class="fab fa-python"></i> زمانی Python</div>
-        <div class="nav-item" onclick="showPage('ai')"><i class="fas fa-robot"></i> زیرەکی دەستکرد</div>
-        <div class="nav-item" onclick="showPage('security')"><i class="fas fa-user-shield"></i> ئاساییشا تەکنیکی</div>
-        <div class="nav-item" onclick="showPage('database')"><i class="fas fa-database"></i> داتابەیس</div>
-        <div class="nav-item" onclick="showPage('github')"><i class="fab fa-github"></i> گیتھەب و Git</div>
-        <div class="nav-item" onclick="showPage('contact')"><i class="fas fa-envelope"></i> پەیوەندی</div>
-    </div>
+    <div class="ambient-light"></div>
 
-    <div class="main-content">
-        
-        <div id="home" class="page-content active">
-            <h1 style="font-size: 3rem;">بخێر بێی بۆ <span style="color:var(--accent)">ئەکادیمیا مستەفا</span></h1>
-            <p style="font-size: 1.2rem; color: #94a3b8;">ئەڤە پلاتفۆڕمەکا گشتگیرە بۆ فێربوونا کۆدینگێ ژ سفرێ تا ئاستێ پڕۆفیشناڵ. ژ لایێ چەپێ بەشەکێ هەلبژێرە.</p>
+    <header>
+        <div style="font-weight: 900; letter-spacing: 1px;">MUSTAFA <span style="color:var(--primary)">ELITE</span></div>
+        <div class="lang-group">
+            <button class="lang-btn" onclick="setLang('ku')">Kurdî</button>
+            <button class="lang-btn" onclick="setLang('ar')">عربي</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="p-home" class="page active">
+            <h1 id="h-welcome">جیهانا تەکنەلۆژیایێ</h1>
+            <p id="h-desc">بخێر بێی بۆ پلاتفۆڕما مستەفا کوردی. لێرە فێری کۆدینگێ و داهاتوویێ ببە.</p>
             
-            <div class="grid-tech">
-                <div class="tech-card"><h3>🚀 ئاستێ دەستپێک</h3><p>فێربوونا بنەماێن وێبێ ب شێوەیەکێ سادە.</p></div>
-                <div class="tech-card"><h3>💻 ئاستێ ناڤنجی</h3><p>ئاڤاکرنا پرۆژێن کارلێکەر.</p></div>
-                <div class="tech-card"><h3>🧠 ئاستێ پێشکەفتی</h3><p>زیرەکییا دەستکرد و داتایێن مەزن.</p></div>
+            <div class="card">
+                <i class="fas fa-bolt" style="font-size: 2rem; color: #fbbf24;"></i>
+                <h2 id="h-card1-t">دەستپێکا خێرا</h2>
+                <p id="h-card1-d">ژ سفرێ دەست پێ بکە و ببە پرۆگرامەرەکێ لێهاتی.</p>
+                <button class="action-btn" id="h-btn">کۆرسان ببینە</button>
             </div>
         </div>
 
-        <div id="html" class="page-content">
-            <h1>فێربوونا HTML5</h1>
-            <p>HTML زمانێ بنیاتێ هەر وێبسایتەکی یە. ئەڤە نموونەیەکا کۆدی یە:</p>
-            <div class="code-block">
-                &lt;div class="container"&gt;<br>
-                &nbsp;&nbsp;&lt;h1&gt;Hello Mustafa!&lt;/h1&gt;<br>
-                &lt;/div&gt;
-            </div>
-            <h3>تەوەرێن سەرەکی:</h3>
-            <ul>
-                <li>Tags & Elements</li>
-                <li>Forms & Inputs</li>
-                <li>Semantic HTML</li>
-            </ul>
-        </div>
-
-        <div id="ai" class="page-content">
-            <h1>زیرەکییا دەستکرد (AI)</h1>
-            <p>لێرە فێری چەوا بکارئینانا مۆدێلێن زیرەک دبی د ناڤ پرۆژێن خۆ دا.</p>
-            [attachment_0](attachment)
-            <div class="tech-card" style="border-right: 4px solid #ff007b;">
-                <h3>Machine Learning</h3>
-                <p>چەوا کۆمپیۆتەر ژ داتایان فێردبیت؟</p>
+        <div id="p-html" class="page">
+            <h2 id="html-title">فێربوونا HTML5</h2>
+            <p id="html-desc">بنیاتێ هەر وێبسایتەکێ ل جیهانێ.</p>
+            
+            <div class="code-preview">
+                &lt;header&gt;<br>
+                &nbsp;&nbsp;&lt;h1&gt;Welcome Mustafa&lt;/h1&gt;<br>
+                &lt;/header&gt;
             </div>
         </div>
 
-        <div id="contact" class="page-content">
-            <h1>پەیوەندی ب مستەفا بکە</h1>
-            <p>بۆ هەر پرسیارەکێ یان کارەکێ تەکنیکی، تو دشێی لێرە نامەیێ بنێری.</p>
-            <input type="text" placeholder="ناڤێ تە" style="width:100%; padding:10px; margin-bottom:10px; background:#1e293b; border:none; color:white;">
-            <textarea placeholder="نامەیا تە" style="width:100%; padding:10px; height:100px; background:#1e293b; border:none; color:white;"></textarea>
-            <button style="background:var(--accent); border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">فڕێکرن</button>
+        <div id="p-ai" class="page">
+            <h2 id="ai-title">زیرەکییا دەستکرد</h2>
+            <p id="ai-desc">چەوا کار دکەت و چەوا دێ ب کار هینی؟</p>
+            
+            <div class="card">
+                <h3>Prompt Engineering</h3>
+                <p id="ai-info">چەوا باشترین ئەنجام ژ AI وەردگری.</p>
+            </div>
         </div>
 
+        </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="navTo('p-home', this)"><i class="fas fa-home"></i></div>
+        <div class="nav-item" onclick="navTo('p-html', this)"><i class="fab fa-html5"></i></div>
+        <div class="nav-item" onclick="navTo('p-ai', this)"><i class="fas fa-robot"></i></div>
+        <div class="nav-item" onclick="navTo('p-security', this)"><i class="fas fa-shield-halved"></i></div>
+        <div class="nav-item" onclick="navTo('p-contact', this)"><i class="fas fa-paper-plane"></i></div>
     </div>
 
     <script>
-        function showPage(pageId) {
-            // شاردنەوا هەمی لاپەران
-            const pages = document.querySelectorAll('.page-content');
-            pages.forEach(page => page.classList.remove('active'));
+        const content = {
+            ku: { welcome: "جیهانا تەکنەلۆژیایێ", desc: "بخێر بێی بۆ پلاتفۆڕما مستەفا کوردی. لێرە فێری کۆدینگێ و داهاتوویێ ببە.", card1t: "دەستپێکا خێرا", card1d: "ژ سفرێ دەست پێ بکە و ببە پرۆگرامەرەکێ لێهاتی.", btn: "کۆرسان ببینە", dir: "rtl" },
+            ar: { welcome: "عالم التكنولوجيا", desc: "أهلاً بك في منصة مصطفى الكوردي. تعلم البرمجة والمستقبل هنا.", card1t: "بداية سريعة", card1d: "ابدأ من الصفر لتصبح مبرمجاً محترفاً.", btn: "شاهد الكورسات", dir: "rtl" },
+            en: { welcome: "Tech Universe", desc: "Welcome to Mustafa Kurdi's platform. Learn coding and the future here.", card1t: "Quick Start", card1d: "Start from zero and become a professional coder.", btn: "View Courses", dir: "ltr" }
+        };
 
-            // لادانا رەنگی ژ هەمی دوگمەکان
-            const items = document.querySelectorAll('.nav-item');
-            items.forEach(item => item.classList.remove('active'));
+        function setLang(lang) {
+            const d = content[lang];
+            document.getElementById('mainHtml').setAttribute('dir', d.dir);
+            document.getElementById('h-welcome').innerText = d.welcome;
+            document.getElementById('h-desc').innerText = d.desc;
+            document.getElementById('h-card1-t').innerText = d.card1t;
+            document.getElementById('h-card1-d').innerText = d.card1d;
+            document.getElementById('h-btn').innerText = d.btn;
+        }
 
-            // نیشاندانا لاپەرێ هەلبژارتی
+        function navTo(pageId, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-
-            // رەنگکرنا دوگمەیا کلیک ل سەر کری
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
