@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mustafa Kurdi | پلاتفۆڕما جیهانا زانیارییان</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --dark: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--dark);
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 84%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 4rem; margin-bottom: 10px; animation: fadeIn 2s; }
+        .hero p { font-size: 1.5rem; color: #94a3b8; max-width: 700px; }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            background: var(--secondary);
+            color: white;
+        }
+        .stat-item h2 { font-size: 2.5rem; margin: 0; }
+
+        /* Course Grid */
+        .section-padding { padding: 100px 10%; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-15px);
+            border-color: var(--primary);
+        }
+
+        .card i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
+
+        /* Contact Section */
+        .contact-form {
+            background: #1e293b;
+            padding: 50px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            background: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: #070b14;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">MUSTAFA KURDI</div>
+        <div style="display: flex; gap: 20px;">
+            <a href="#" style="color: white; text-decoration: none;">سەرەکی</a>
+            <a href="#courses" style="color: white; text-decoration: none;">کۆرسەکان</a>
+            <a href="#contact" style="color: white; text-decoration: none;">پەیوەندی</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>داهاتووی <span>تەکنەلۆژیا</span> لێرەیە</h1>
+        <p>ئەز مستەفا کوردیم، رێبەرێ تە د جیهانا کۆدینگ و زانیارییان دا. وەرە دا پێکڤە فێری زمانێن داهاتووی ببین.</p>
+        <br>
+        <a href="#courses" class="btn-submit" style="text-decoration: none; width: auto;">دەستپێبکە</a>
+    </section>
+
+    <section class="stats">
+        <div class="stat-item"><h2>+500</h2><p>قوتابی</p></div>
+        <div class="stat-item"><h2>+50</h2><p>پرۆژە</p></div>
+        <div class="stat-item"><h2>+10</h2><p>کۆرس</p></div>
+    </section>
+
+    <section class="section-padding" id="courses">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px;">بەشێن فێربوونێ</h2>
+        <div class="grid">
+            <div class="card">
+                <i class="fas fa-code"></i>
+                <h3>Full-Stack Development</h3>
+                <p>فێربوونا چێکرنا وێبسایتان ژ سفرێ تا ئاستێ پێشکەفتی دگەل React و Node.js.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Cyber Security</h3>
+                <p>پاراستنا داتایان و فێربوونا رێکێن بەرگریێ ل دژی هێرشێن ئەلکترۆنی.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-brain"></i>
+                <h3>AI & Python</h3>
+                <p>چوونا ناڤ جیهانا زیرەکییا دەستکرد و شیکارکرنا داتایان ب زمانێ پایتۆن.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" id="contact">
+        <h2 style="text-align: center; margin-bottom: 40px;">پەیوەندی ب من بکە</h2>
+        <div class="contact-form">
+            <input type="text" placeholder="ناڤێ تە">
+            <input type="email" placeholder="ئیمێلێ تە">
+            <textarea rows="5" placeholder="نامەیا تە"></textarea>
+            <button class="btn-submit">فڕێکە</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>هەمی ماف یێن پاراستینە بۆ <b>Mustafa Kurdi</b> &copy; 2026</p>
+        <div style="font-size: 1.5rem; margin-top: 10px;">
+            <i class="fab fa-facebook" style="margin: 0 10px; cursor: pointer;"></i>
+            <i class="fab fa-instagram" style="margin: 0 10px; cursor: pointer;"></i>
+            <i class="fab fa-github" style="margin: 0 10px; cursor: pointer;"></i>
+        </div>
+    </footer>
+
+</body>
+</html>
