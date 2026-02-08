@@ -3,140 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mustafa | The Architect</title>
+    <title>Mustafa | The Master Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --neon-blue: #00f2fe; --neon-purple: #9d50bb; --bg-dark: #000; }
-
+        :root { --neon: #00f2fe; --accent: #ff00c1; --bg: #000205; }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
-            margin: 0; padding: 0; background: var(--bg-dark); color: white;
-            font-family: 'Consolas', monospace; overflow: hidden; height: 100vh;
+            margin: 0; padding: 0; background: var(--bg); color: white;
+            font-family: 'Consolas', 'Courier New', monospace; overflow: hidden; height: 100vh;
         }
 
-        /* 3D Hyper-Drive Background */
-        #warpCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* Galactic Background */
+        #galaxy { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Top Status Bar */
-        .status-bar {
-            position: fixed; top: 0; width: 100%; height: 40px;
-            background: rgba(0, 242, 254, 0.1); backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; font-size: 0.8rem; border-bottom: 1px solid var(--neon-blue);
-            z-index: 1000;
+        /* Top OS Header */
+        .os-header {
+            height: 50px; background: rgba(0, 242, 254, 0.05);
+            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
+            font-size: 0.8rem; letter-spacing: 2px;
         }
 
-        /* Side Menu Icon (3 Lines) */
-        .menu-launcher {
-            font-size: 1.5rem; color: var(--neon-blue); cursor: pointer;
-            text-shadow: 0 0 10px var(--neon-blue);
+        /* Sidebar Menu Button (3 Lines) */
+        .menu-trigger { font-size: 1.5rem; color: var(--neon); cursor: pointer; animation: glow 2s infinite; }
+        @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Dashboard Grid */
+        .dashboard-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            padding: 20px; height: calc(100vh - 130px); overflow-y: auto;
         }
 
-        /* Main Dashboard Grid */
-        .grid-container {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
-            padding: 60px 20px 20px; height: 100vh;
+        .node {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 20px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; backdrop-filter: blur(10px);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden;
         }
 
-        .hexagon-module {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 242, 254, 0.3);
-            backdrop-filter: blur(15px); border-radius: 15px; position: relative;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: 0.4s; overflow: hidden;
-        }
+        .node:active { transform: scale(0.95); border-color: var(--neon); background: rgba(0, 242, 254, 0.1); }
+        .node i { font-size: 2rem; color: var(--neon); margin-bottom: 10px; }
 
-        .hexagon-module:hover {
-            background: rgba(0, 242, 254, 0.1); border-color: var(--neon-blue);
-            transform: scale(1.03); box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
-        }
+        /* Skills Bars */
+        .skill-section { padding: 0 20px; margin-top: 10px; }
+        .skill-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 8px 0; position: relative; }
+        .skill-progress { height: 100%; background: var(--neon); border-radius: 10px; box-shadow: 0 0 10px var(--neon); }
 
-        .hexagon-module i { font-size: 2.5rem; color: var(--neon-blue); margin-bottom: 10px; }
-
-        /* System Logs at Bottom */
-        .system-logs {
+        /* Bottom Command Console */
+        .console {
             position: fixed; bottom: 0; width: 100%; height: 80px;
-            background: rgba(0,0,0,0.8); border-top: 1px solid var(--neon-purple);
-            padding: 10px 20px; font-size: 0.7rem; color: #4facfe;
-            overflow: hidden; pointer-events: none;
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--neon);
+            padding: 10px; font-size: 0.65rem; color: var(--neon); overflow: hidden;
         }
 
         /* Sidebar Overlay */
         .sidebar {
-            position: fixed; top: 0; left: -100%; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000; transition: 0.5s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(30px);
+            z-index: 2000; transition: 0.5s; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-        .sidebar.active { left: 0; }
-
-        .nav-link { font-size: 2rem; color: white; margin: 20px; text-decoration: none; border-bottom: 2px solid var(--neon-blue); }
-
-        /* Animation Classes */
-        .pulse { animation: pulseAnim 2s infinite; }
-        @keyframes pulseAnim { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .sidebar.active { right: 0; }
+        .nav-item { font-size: 1.8rem; margin: 15px; color: white; text-decoration: none; border-bottom: 2px solid var(--neon); }
     </style>
 </head>
 <body>
 
-    <canvas id="warpCanvas"></canvas>
+    <canvas id="galaxy"></canvas>
 
-    <div class="status-bar">
-        <span>CORE: ACTIVE</span>
-        <div class="menu-launcher" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
-        <span>SYSTEM_V.9.0</span>
+    <header class="os-header">
+        <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
+        <div id="clock">00:00:00</div>
+        <div>MUSTAFA_V10.0</div>
+    </header>
+
+    <div class="skill-section">
+        <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+        <div style="font-size: 0.6rem; display: flex; justify-content: space-between;">
+            <span>SYSTEM_CPU: 12%</span>
+            <span>EXPERIENCE_LEVEL: ARCHITECT</span>
+        </div>
     </div>
 
-    <nav class="sidebar" id="sidebar">
-        <div onclick="toggleMenu()" style="position:absolute; top:20px; left:20px; font-size:2rem;"><i class="fas fa-times"></i></div>
-        <a href="#" class="nav-link">PROGRAMMING</a>
-        <a href="#" class="nav-link">GAME DESIGN</a>
-        <a href="#" class="nav-link">UI/UX MASTER</a>
-        <a href="#" class="nav-link">DATABASE</a>
-    </nav>
+    
 
-    <div class="grid-container">
-        <div class="hexagon-module">
-            <i class="fas fa-code"></i>
-            <h4 style="margin:0">کۆدینگ</h4>
-            <span style="font-size:0.6rem; opacity:0.6">FULL-STACK MASTER</span>
+    <div class="dashboard-container">
+        <div class="node" onclick="alert('Entering Web Lab...')">
+            <i class="fas fa-globe"></i>
+            <span style="font-size: 0.8rem;">WEB_LAB</span>
         </div>
-
-        <div class="hexagon-module">
+        <div class="node" onclick="alert('Initializing Game Engine...')">
             <i class="fas fa-gamepad"></i>
-            <h4 style="margin:0">یاری</h4>
-            <span style="font-size:0.6rem; opacity:0.6">UNREAL ENGINE 5</span>
+            <span style="font-size: 0.8rem;">GAME_DEV</span>
         </div>
-
-        <div class="hexagon-module">
-            <i class="fas fa-bezier-curve"></i>
-            <h4 style="margin:0">دیزاین</h4>
-            <span style="font-size:0.6rem; opacity:0.6">FUTURISTIC UI</span>
+        <div class="node" onclick="alert('Accessing Designs...')">
+            <i class="fas fa-pen-nib"></i>
+            <span style="font-size: 0.8rem;">DESIGN</span>
         </div>
-
-        <div class="hexagon-module">
-            <i class="fas fa-shield-virus"></i>
-            <h4 style="margin:0">ئاساییش</h4>
-            <span style="font-size:0.6rem; opacity:0.6">CYBER SECURITY</span>
+        <div class="node" onclick="alert('Decrypting Programs...')">
+            <i class="fas fa-microchip"></i>
+            <span style="font-size: 0.8rem;">SOFTWARE</span>
         </div>
     </div>
 
-    <div class="system-logs" id="logs">
-        > INITIALIZING SYSTEM...<br>
-        > LOADING GRAPHICS ENGINE...<br>
-        > MUSTAFA OS READY_
+    <div class="console" id="log">
+        > SYSTEM_READY...<br>
+        > WAITING_FOR_INPUT...
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div onclick="toggleMenu()" style="position:absolute; top:20px; right:20px; font-size:2rem;"><i class="fas fa-times"></i></div>
+        <a href="#" class="nav-item">WEB_ENGINEERING</a>
+        <a href="#" class="nav-item">GAME_ASSETS</a>
+        <a href="#" class="nav-item">APP_LOGIC</a>
+        <a href="#" class="nav-item">SECURE_FILES</a>
     </div>
 
     <script>
-        // --- HYPER-SPEED CANVAS ---
-        const canvas = document.getElementById('warpCanvas');
+        // --- GALACTIC WARP ANIMATION ---
+        const canvas = document.getElementById('galaxy');
         const ctx = canvas.getContext('2d');
         let stars = [];
-        const numStars = 500;
-        let speed = 5;
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             stars = [];
-            for (let i = 0; i < numStars; i++) {
+            for (let i = 0; i < 300; i++) {
                 stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, z: Math.random() * canvas.width });
             }
         }
@@ -144,30 +139,29 @@
         function draw() {
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
             stars.forEach(s => {
-                s.z -= speed;
+                s.z -= 2;
                 if (s.z <= 0) s.z = canvas.width;
                 let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
                 let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
-                let size = (1 - s.z/canvas.width) * 4;
-                ctx.beginPath();
-                ctx.arc(sx, sy, size, 0, Math.PI*2);
-                ctx.fill();
+                let size = (1 - s.z/canvas.width) * 3;
+                ctx.fillStyle = `rgba(0, 242, 254, ${1 - s.z/canvas.width})`;
+                ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(draw);
         }
 
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-
-        // Live Logs Effect
+        // --- CLOCK & LOGS ---
         setInterval(() => {
-            const logs = document.getElementById('logs');
-            const newLog = document.createElement('div');
-            newLog.innerHTML = `> SYNCING DATA: ${Math.random().toString(16).substr(2, 8)}... SUCCESS`;
-            logs.appendChild(newLog);
-            if (logs.children.length > 5) logs.removeChild(logs.firstChild);
-        }, 2000);
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            const log = document.getElementById('log');
+            const line = document.createElement('div');
+            line.innerHTML = `> UPDATE: ${Math.random().toString(16).substr(2,6)}... SUCCESS`;
+            log.appendChild(line);
+            if(log.children.length > 4) log.removeChild(log.firstChild);
+        }, 1000);
+
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
         window.addEventListener('resize', init);
         init(); draw();
