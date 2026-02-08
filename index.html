@@ -1,175 +1,162 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl" id="app">
+<html lang="ku" dir="rtl" id="main">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mustafa | Quantum Developer</title>
+    <title>Mustafa | Star Developer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --neon: #00f2fe; --purple: #7000ff; --dark: #000205;
+        :root { --neon: #00f2fe; --space: #010409; --gold: #f1c40f; }
+
+        body, html { margin: 0; padding: 0; background: var(--space); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+
+        /* Starfield Background */
+        #star-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        /* Mobile Header */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); z-index: 1000;
         }
 
-        * { box-sizing: border-box; }
-        body, html { 
-            margin: 0; padding: 0; background: var(--dark); color: white;
-            font-family: 'Segoe UI', system-ui; overflow-x: hidden;
+        .menu-icon { font-size: 1.8rem; color: var(--neon); cursor: pointer; }
+
+        /* Sidebar Overlay */
+        .sidebar {
+            position: fixed; top: 0; right: -100%; width: 80%; height: 100%;
+            background: rgba(1, 4, 9, 0.95); backdrop-filter: blur(20px);
+            transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1); z-index: 2000;
+            padding: 80px 30px; border-left: 1px solid var(--neon);
+        }
+        .sidebar.active { right: 0; }
+
+        /* Main Content */
+        .container { padding: 100px 20px; }
+
+        /* Deep Dive System */
+        .core-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 20px; padding: 25px; margin-bottom: 20px; transition: 0.4s;
         }
 
-        /* Quantum Particles Background */
-        #quantum-bg { position: fixed; top: 0; left: 0; z-index: -1; }
-
-        /* Floating Nav for Mobile */
-        nav {
-            position: fixed; top: 15px; width: 94%; left: 3%;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px;
-            padding: 15px; display: flex; justify-content: space-between; z-index: 1000;
+        .sub-sections { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        .sub-item { 
+            background: rgba(0, 242, 254, 0.05); padding: 15px; border-radius: 12px; 
+            margin-bottom: 10px; border-right: 3px solid var(--neon); animation: slideIn 0.3s forwards;
         }
 
-        .lang-btn { background: var(--neon); color: black; border: none; padding: 5px 12px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Main Content Wrapper */
-        .main-wrapper { padding: 100px 20px 40px; display: flex; flex-direction: column; gap: 30px; }
+        .btn-expand { background: none; border: 1px solid var(--neon); color: var(--neon); padding: 8px 20px; border-radius: 50px; cursor: pointer; width: 100%; margin-top: 10px; }
 
-        /* Holographic Card Section */
-        .glass-hero {
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(112, 0, 255, 0.1));
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px;
-            padding: 40px 25px; text-align: center; backdrop-filter: blur(30px);
-            box-shadow: 0 0 40px rgba(0, 242, 254, 0.1);
-        }
-
-        h1 { font-size: 2.8rem; margin: 0; background: linear-gradient(to bottom, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
-
-        /* Coding Lab Grid - Perfect for Mobile */
-        .lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); gap: 20px; }
-        
-        @media (min-width: 768px) { .lab-grid { grid-template-columns: repeat(3, 1fr); } }
-
-        .lab-card {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 25px; padding: 30px; transition: 0.4s; position: relative;
-        }
-
-        .lab-card:hover { border-color: var(--neon); background: rgba(0, 242, 254, 0.05); transform: translateY(-5px); }
-        .lab-card i { font-size: 2.5rem; color: var(--neon); margin-bottom: 15px; text-shadow: 0 0 15px var(--neon); }
-
-        .code-snippet {
-            background: #000; border-radius: 12px; padding: 15px; font-family: monospace;
-            font-size: 0.85rem; color: #7000ff; border: 1px solid #1e293b; margin-top: 15px;
-            direction: ltr; text-align: left;
-        }
-
-        /* Experience Bar */
-        .skill-bar { height: 6px; background: #1e293b; border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .skill-fill { height: 100%; background: var(--neon); box-shadow: 0 0 10px var(--neon); }
-
+        .lang-switch { display: flex; gap: 10px; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
-    <canvas id="quantum-bg"></canvas>
+    <canvas id="star-canvas"></canvas>
 
-    <nav>
-        <div style="font-weight: 900; color: var(--neon); font-size: 1.2rem;">MUSTAFA<span style="color:white">LAB</span></div>
-        <div class="lang-ctrl">
-            <button class="lang-btn" onclick="setLang('ku')">KU</button>
-            <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <header>
+        <div class="menu-icon" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+        <div style="font-weight: 900; letter-spacing: 1px; color: var(--neon);">MUSTAFA STAR</div>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <div class="menu-icon" onclick="toggleSidebar()" style="position:absolute; top:20px; left:20px;"><i class="fas fa-times"></i></div>
+        <div class="lang-switch">
+            <button onclick="setLang('ku')" class="btn-expand" style="width:auto">KU</button>
+            <button onclick="setLang('en')" class="btn-expand" style="width:auto">EN</button>
         </div>
-    </nav>
+        <h2 id="s-title">گەڕیان د ستێراندا</h2>
+        <p id="s-desc">ژ لایێ چەپێ بەشان دیار بکە</p>
+    </div>
 
-    <div class="main-wrapper">
-        <div class="glass-hero">
-            <h1 id="h-title">Architecting Reality</h1>
-            <p id="h-desc" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.6; margin-top: 15px;">
-                ئەز مستەفا کوردیم، لێرە ئەز کۆدێ داهاتوویێ دەنڤێسم. تێکەڵەیەک ژ خەیال و تەکنەلۆژیایێ.
-            </p>
-        </div>
-
-        
-
-        <div class="lab-grid">
-            <div class="lab-card">
-                <i class="fas fa-atom"></i>
-                <h3 id="c1-t">Web Core</h3>
-                <p id="c1-d">دروستکرنا گەردوونێن دیجیتاڵی ب HTML/CSS/JS.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
-                <div class="code-snippet"><span>const</span> universe = new World();</div>
-            </div>
-
-            <div class="lab-card">
-                <i class="fas fa-brain"></i>
-                <h3 id="c2-t">AI Neural</h3>
-                <p id="c2-d">مێشکێن دەستکرد بۆ شیکارکرنا زانیارییان.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
-                <div class="code-snippet"><span>import</span> brain from 'future';</div>
-            </div>
-
-            <div class="lab-card">
-                <i class="fas fa-code-merge"></i>
-                <h3 id="c3-t">Backend Engine</h3>
-                <p id="c3-d">ئاڤاکرنا دڵ و ناخێ سیستەمێن مەزن.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 88%;"></div></div>
-                <div class="code-snippet"><span>server</span>.ignite();</div>
+    <div class="container">
+        <div class="core-card">
+            <h2 id="c1-t"><i class="fas fa-code"></i> Web Core System</h2>
+            <p id="c1-d">هەمی تشت دەربارەی ئاڤاکرنا وێبسایتێن پێشکەفتی.</p>
+            <button class="btn-expand" onclick="toggleSub('web-sub')" id="b1">EXPLORE DEPTHS</button>
+            
+            <div id="web-sub" class="sub-sections">
+                <div class="sub-item">
+                    <h4>Frontend Mastery</h4>
+                    <p>دیزاین و کارلێکرن ب HTML, CSS, JS.</p>
+                </div>
+                <div class="sub-item">
+                    <h4>Backend Engine</h4>
+                    <p>داتابەیس و سێرڤەر و ئاساییش.</p>
+                </div>
+                
             </div>
         </div>
 
-        
-
-        <div class="glass-hero" style="padding: 30px;">
-            <h2 id="f-t">گەشتێ دەستپێبکە</h2>
-            <p id="f-d">ببیتە خودانێ هێزا کۆدینگێ و داهاتوویێ بگوھۆرە.</p>
-            <button style="background:var(--neon); border:none; padding:15px 40px; border-radius:15px; font-weight:bold; cursor:pointer;">ENTER SYSTEM</button>
+        <div class="core-card">
+            <h2 id="c2-t"><i class="fas fa-brain"></i> AI Neural Lab</h2>
+            <p id="c2-d">فێربوونا مێشکێ دەستکرد و سیستەمێن زیرەک.</p>
+            <button class="btn-expand" onclick="toggleSub('ai-sub')" id="b2">OPEN LAB</button>
+            
+            <div id="ai-sub" class="sub-sections">
+                <div class="sub-item">
+                    <h4>Machine Learning</h4>
+                    <p>فێرکرنا کۆمپیۆتەری ژ داتایان.</p>
+                </div>
+                
+                <div class="sub-item">
+                    <h4>Deep Learning</h4>
+                    <p>تۆڕێن عەسەبی و ناسینا وێنەیان.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- QUANTUM FLUID BACKGROUND ---
-        const canvas = document.getElementById('quantum-bg');
+        // --- STARFIELD ANIMATION ---
+        const canvas = document.getElementById('star-canvas');
         const ctx = canvas.getContext('2d');
-        let points = [];
+        let stars = [];
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            points = []; for(let i=0; i<60; i++) points.push({
-                x: Math.random()*canvas.width, y: Math.random()*canvas.height, 
-                r: Math.random()*3 + 1, vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2
-            });
+            stars = [];
+            for (let i = 0; i < 400; i++) {
+                stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width });
+            }
         }
         function draw() {
-            ctx.fillStyle = "rgba(0, 2, 5, 0.15)"; ctx.fillRect(0,0,canvas.width, canvas.height);
-            points.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x<0 || p.x>canvas.width) p.vx*=-1; if(p.y<0 || p.y>canvas.height) p.vy*=-1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                ctx.fillStyle = p.r > 2 ? "#7000ff" : "#00f2fe"; ctx.fill();
-                // Glow effect
-                ctx.shadowBlur = 15; ctx.shadowColor = "#00f2fe";
+            ctx.fillStyle = "black"; ctx.fillRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            stars.forEach(s => {
+                s.z -= 2;
+                if (s.z <= 0) s.z = canvas.width;
+                let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+                let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+                let size = (1 - s.z/canvas.width) * 3;
+                ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(draw);
         }
-        window.addEventListener('resize', init);
         init(); draw();
 
-        // --- LANGUAGE ENGINE ---
-        const translations = {
-            ku: { title: "Architecting Reality", desc: "ئەز مستەفا کوردیم، لێرە ئەز کۆدێ داهاتوویێ دەنڤێسم. تێکەڵەیەک ژ خەیال و تەکنەلۆژیایێ.", c1t: "Web Core", c1d: "دروستکرنا گەردوونێن دیجیتاڵی ب HTML/CSS/JS.", c2t: "AI Neural", c2d: "مێشکێن دەستکرد بۆ شیکارکرنا زانیارییان.", c3t: "Backend Engine", c3d: "ئاڤاکرنا دڵ و ناخێ سیستەمێن مەزن.", ft: "گەشتێ دەستپێبکە", fd: "ببیتە خودانێ هێزا کۆدینگێ و داهاتوویێ بگوھۆرە.", dir: "rtl" },
-            en: { title: "Architecting Reality", desc: "I am Mustafa Kurdi, writing the code of the future. A fusion of imagination and technology.", c1t: "Web Core", c1d: "Building digital universes with HTML/CSS/JS.", c2t: "AI Neural", c2d: "Artificial brains for data intelligence.", c3t: "Backend Engine", c3d: "Powering the heart of massive systems.", ft: "Start Journey", fd: "Own the power of coding and change the future.", dir: "ltr" }
+        // --- INTERACTIVE LOGIC ---
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        
+        function toggleSub(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+
+        const trans = {
+            ku: { c1t: "Web Core System", c1d: "هەمی تشت دەربارەی ئاڤاکرنا وێبسایتێن پێشکەفتی.", b1: "کۆلینێ بکە", dir: "rtl" },
+            en: { c1t: "Web Core System", c1d: "Everything about building advanced websites.", b1: "EXPLORE DEPTHS", dir: "ltr" }
         };
 
-        function setLang(lang) {
-            const d = translations[lang];
-            document.getElementById('app').setAttribute('dir', d.dir);
-            document.getElementById('h-title').innerText = d.title;
-            document.getElementById('h-desc').innerText = d.desc;
+        function setLang(l) {
+            const d = trans[l];
+            document.getElementById('main').setAttribute('dir', d.dir);
             document.getElementById('c1-t').innerText = d.c1t;
             document.getElementById('c1-d').innerText = d.c1d;
-            document.getElementById('c2-t').innerText = d.c2t;
-            document.getElementById('c2-d').innerText = d.c2d;
-            document.getElementById('c3-t').innerText = d.c3t;
-            document.getElementById('c3-d').innerText = d.c3d;
-            document.getElementById('f-t').innerText = d.ft;
-            document.getElementById('f-d').innerText = d.fd;
+            document.getElementById('b1').innerText = d.b1;
+            toggleSidebar();
         }
     </script>
 </body>
