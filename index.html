@@ -3,146 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mustafa Kurdi | The Coding Architect</title>
+    <title>Mustafa | Quantum Developer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --cyan: #00f2fe; --blue: #4facfe; --dark: #020617; --card: rgba(30, 41, 59, 0.7);
+            --neon: #00f2fe; --purple: #7000ff; --dark: #000205;
         }
 
-        body, html { margin: 0; padding: 0; height: 100vh; background: var(--dark); color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
-
-        /* Canvas Particle Background */
-        #bg { position: fixed; top: 0; left: 0; z-index: -1; }
-
-        /* Dashboard Layout */
-        .wrapper { display: flex; height: 100vh; backdrop-filter: blur(10px); }
-
-        /* Sidebar Custom */
-        aside {
-            width: 280px; background: rgba(15, 23, 42, 0.9); border-left: 1px solid rgba(0, 242, 254, 0.2);
-            display: flex; flex-direction: column; padding: 30px 15px; z-index: 100;
+        * { box-sizing: border-box; }
+        body, html { 
+            margin: 0; padding: 0; background: var(--dark); color: white;
+            font-family: 'Segoe UI', system-ui; overflow-x: hidden;
         }
 
-        .side-link {
-            padding: 15px; margin: 8px 0; border-radius: 12px; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 12px; color: #94a3b8; border: 1px solid transparent;
+        /* Quantum Particles Background */
+        #quantum-bg { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        /* Floating Nav for Mobile */
+        nav {
+            position: fixed; top: 15px; width: 94%; left: 3%;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px;
+            padding: 15px; display: flex; justify-content: space-between; z-index: 1000;
         }
 
-        .side-link:hover, .side-link.active {
-            background: rgba(0, 242, 254, 0.1); color: var(--cyan); border-color: var(--cyan);
+        .lang-btn { background: var(--neon); color: black; border: none; padding: 5px 12px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+
+        /* Main Content Wrapper */
+        .main-wrapper { padding: 100px 20px 40px; display: flex; flex-direction: column; gap: 30px; }
+
+        /* Holographic Card Section */
+        .glass-hero {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(112, 0, 255, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px;
+            padding: 40px 25px; text-align: center; backdrop-filter: blur(30px);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.1);
         }
 
-        /* Main Lab Area */
-        main { flex: 1; padding: 40px; overflow-y: auto; }
+        h1 { font-size: 2.8rem; margin: 0; background: linear-gradient(to bottom, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
 
-        .glass-panel {
-            background: var(--card); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s ease-out;
+        /* Coding Lab Grid - Perfect for Mobile */
+        .lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); gap: 20px; }
+        
+        @media (min-width: 768px) { .lab-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .lab-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 25px; padding: 30px; transition: 0.4s; position: relative;
         }
 
-        .lang-title { font-size: 3rem; margin: 0; background: linear-gradient(to right, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lab-card:hover { border-color: var(--neon); background: rgba(0, 242, 254, 0.05); transform: translateY(-5px); }
+        .lab-card i { font-size: 2.5rem; color: var(--neon); margin-bottom: 15px; text-shadow: 0 0 15px var(--neon); }
 
-        .capability-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; }
-        .cap-card { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; border-top: 3px solid var(--cyan); }
+        .code-snippet {
+            background: #000; border-radius: 12px; padding: 15px; font-family: monospace;
+            font-size: 0.85rem; color: #7000ff; border: 1px solid #1e293b; margin-top: 15px;
+            direction: ltr; text-align: left;
+        }
 
-        .lang-switch { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
-        .lang-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--cyan); color: white; padding: 5px 12px; border-radius: 8px; cursor: pointer; }
+        /* Experience Bar */
+        .skill-bar { height: 6px; background: #1e293b; border-radius: 10px; margin-top: 10px; overflow: hidden; }
+        .skill-fill { height: 100%; background: var(--neon); box-shadow: 0 0 10px var(--neon); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <canvas id="bg"></canvas>
+    <canvas id="quantum-bg"></canvas>
 
-    <div class="lang-switch">
-        <button class="lang-btn" onclick="changeLang('ku')">Kurdî</button>
-        <button class="lang-btn" onclick="changeLang('ar')">عربي</button>
-        <button class="lang-btn" onclick="changeLang('en')">EN</button>
-    </div>
+    <nav>
+        <div style="font-weight: 900; color: var(--neon); font-size: 1.2rem;">MUSTAFA<span style="color:white">LAB</span></div>
+        <div class="lang-ctrl">
+            <button class="lang-btn" onclick="setLang('ku')">KU</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+    </nav>
 
-    <div class="wrapper">
-        <aside>
-            <h2 style="color: var(--cyan); text-align: center; margin-bottom: 40px;">MUSTAFA LAB</h2>
-            <div class="side-link active" onclick="loadContent('html')"><i class="fab fa-html5"></i> <span id="m-html">Web Dev (HTML)</span></div>
-            <div class="side-link" onclick="loadContent('python')"><i class="fab fa-python"></i> <span id="m-py">AI & Data (Python)</span></div>
-            <div class="side-link" onclick="loadContent('js')"><i class="fab fa-js"></i> <span id="m-js">Apps (JavaScript)</span></div>
-            <div class="side-link" onclick="loadContent('sql')"><i class="fas fa-database"></i> <span id="m-sql">Databases (SQL)</span></div>
-            <div class="side-link" onclick="loadContent('security')"><i class="fas fa-shield-halved"></i> <span id="m-sec">Cyber Security</span></div>
-        </aside>
+    <div class="main-wrapper">
+        <div class="glass-hero">
+            <h1 id="h-title">Architecting Reality</h1>
+            <p id="h-desc" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.6; margin-top: 15px;">
+                ئەز مستەفا کوردیم، لێرە ئەز کۆدێ داهاتوویێ دەنڤێسم. تێکەڵەیەک ژ خەیال و تەکنەلۆژیایێ.
+            </p>
+        </div>
 
-        <main id="main-content">
-            <div class="glass-panel">
-                <h1 class="lang-title" id="p-title">Web Development</h1>
-                <p id="p-desc" style="font-size: 1.2rem; color: #cbd5e1; margin-top: 15px;">
-                    ئەڤە بنیاتێ هەمی جیهانا ئەنترنێتێ یە. تو دشێی ب ڤی زمانی هەر تشتێ تو دبینی ئاڤا بکەی.
-                </p>
+        
 
-                
-
-                <div class="capability-grid">
-                    <div class="cap-card"><h4 id="c1-t">ئاڤاکرنا سایتان</h4><p id="c1-p">دروستکرنا سایتێن وەک فەیسبووک و ئەمازۆن.</p></div>
-                    <div class="cap-card"><h4 id="c2-t">دیزاینێن مۆدێرن</h4><p id="c2-p">کۆنترۆڵکرنا ڕەنگ و جوانییا وێبسایتان.</p></div>
-                </div>
-                
-                
-
+        <div class="lab-grid">
+            <div class="lab-card">
+                <i class="fas fa-atom"></i>
+                <h3 id="c1-t">Web Core</h3>
+                <p id="c1-d">دروستکرنا گەردوونێن دیجیتاڵی ب HTML/CSS/JS.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
+                <div class="code-snippet"><span>const</span> universe = new World();</div>
             </div>
-        </main>
+
+            <div class="lab-card">
+                <i class="fas fa-brain"></i>
+                <h3 id="c2-t">AI Neural</h3>
+                <p id="c2-d">مێشکێن دەستکرد بۆ شیکارکرنا زانیارییان.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+                <div class="code-snippet"><span>import</span> brain from 'future';</div>
+            </div>
+
+            <div class="lab-card">
+                <i class="fas fa-code-merge"></i>
+                <h3 id="c3-t">Backend Engine</h3>
+                <p id="c3-d">ئاڤاکرنا دڵ و ناخێ سیستەمێن مەزن.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 88%;"></div></div>
+                <div class="code-snippet"><span>server</span>.ignite();</div>
+            </div>
+        </div>
+
+        
+
+        <div class="glass-hero" style="padding: 30px;">
+            <h2 id="f-t">گەشتێ دەستپێبکە</h2>
+            <p id="f-d">ببیتە خودانێ هێزا کۆدینگێ و داهاتوویێ بگوھۆرە.</p>
+            <button style="background:var(--neon); border:none; padding:15px 40px; border-radius:15px; font-weight:bold; cursor:pointer;">ENTER SYSTEM</button>
+        </div>
     </div>
 
     <script>
-        // --- PRO NEURAL BACKGROUND ---
-        const canvas = document.getElementById('bg');
+        // --- QUANTUM FLUID BACKGROUND ---
+        const canvas = document.getElementById('quantum-bg');
         const ctx = canvas.getContext('2d');
-        let dots = [];
+        let points = [];
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            dots = []; for(let i=0; i<150; i++) dots.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
-        }
-        function animate() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            dots.forEach(d => {
-                d.x+=d.vx; d.y+=d.vy;
-                if(d.x<0 || d.x>canvas.width) d.vx*=-1; if(d.y<0 || d.y>canvas.height) d.vy*=-1;
-                ctx.fillStyle = '#00f2fe'; ctx.beginPath(); ctx.arc(d.x, d.y, 1.5, 0, Math.PI*2); ctx.fill();
-                dots.forEach(d2 => {
-                    let dist = Math.hypot(d.x-d2.x, d.y-d2.y);
-                    if(dist<120) { ctx.strokeStyle = `rgba(0,242,254,${1 - dist/120})`; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d2.x, d2.y); ctx.stroke(); }
-                });
+            points = []; for(let i=0; i<60; i++) points.push({
+                x: Math.random()*canvas.width, y: Math.random()*canvas.height, 
+                r: Math.random()*3 + 1, vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2
             });
-            requestAnimationFrame(animate);
         }
-        init(); animate();
+        function draw() {
+            ctx.fillStyle = "rgba(0, 2, 5, 0.15)"; ctx.fillRect(0,0,canvas.width, canvas.height);
+            points.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0 || p.x>canvas.width) p.vx*=-1; if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = p.r > 2 ? "#7000ff" : "#00f2fe"; ctx.fill();
+                // Glow effect
+                ctx.shadowBlur = 15; ctx.shadowColor = "#00f2fe";
+            });
+            requestAnimationFrame(draw);
+        }
+        window.addEventListener('resize', init);
+        init(); draw();
 
-        // --- DYNAMIC CONTENT ENGINE ---
-        const data = {
-            html: {
-                title: "Web Development",
-                desc: "بنیاتێ هەمی جیهانا ئەنترنێتێ. تو دشێی ب ڤی زمانی هەر تشتێ تو دبینی ئاڤا بکەی.",
-                caps: [["ئاڤاکرنا سایتان", "دروستکرنا سایتێن وەک فەیسبووک."], ["دیزاین", "کۆنترۆڵکرنا ڕەنگ و جوانییا سایتان."]]
-            },
-            python: {
-                title: "AI & Python",
-                desc: "زمانێ زیرەکییا دەستکرد. تو دشێی پرۆگرامێن زیرەک چێبکەی کو وەک مرۆڤی دئاخفن.",
-                caps: [["Machine Learning", "فێرکرنا کۆمپیۆتەری ژ داتایان."], ["Automation", "کرنا کارێن گران ب ئۆتۆماتیکی."]]
-            }
+        // --- LANGUAGE ENGINE ---
+        const translations = {
+            ku: { title: "Architecting Reality", desc: "ئەز مستەفا کوردیم، لێرە ئەز کۆدێ داهاتوویێ دەنڤێسم. تێکەڵەیەک ژ خەیال و تەکنەلۆژیایێ.", c1t: "Web Core", c1d: "دروستکرنا گەردوونێن دیجیتاڵی ب HTML/CSS/JS.", c2t: "AI Neural", c2d: "مێشکێن دەستکرد بۆ شیکارکرنا زانیارییان.", c3t: "Backend Engine", c3d: "ئاڤاکرنا دڵ و ناخێ سیستەمێن مەزن.", ft: "گەشتێ دەستپێبکە", fd: "ببیتە خودانێ هێزا کۆدینگێ و داهاتوویێ بگوھۆرە.", dir: "rtl" },
+            en: { title: "Architecting Reality", desc: "I am Mustafa Kurdi, writing the code of the future. A fusion of imagination and technology.", c1t: "Web Core", c1d: "Building digital universes with HTML/CSS/JS.", c2t: "AI Neural", c2d: "Artificial brains for data intelligence.", c3t: "Backend Engine", c3d: "Powering the heart of massive systems.", ft: "Start Journey", fd: "Own the power of coding and change the future.", dir: "ltr" }
         };
 
-        function loadContent(key) {
-            const item = data[key] || data.html;
-            document.getElementById('p-title').innerText = item.title;
-            document.getElementById('p-desc').innerText = item.desc;
-            // Update active state
-            document.querySelectorAll('.side-link').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
-        function changeLang(l) {
-            document.getElementById('app').setAttribute('dir', l === 'en' ? 'ltr' : 'rtl');
-            // Add translation logic for all labels here
+        function setLang(lang) {
+            const d = translations[lang];
+            document.getElementById('app').setAttribute('dir', d.dir);
+            document.getElementById('h-title').innerText = d.title;
+            document.getElementById('h-desc').innerText = d.desc;
+            document.getElementById('c1-t').innerText = d.c1t;
+            document.getElementById('c1-d').innerText = d.c1d;
+            document.getElementById('c2-t').innerText = d.c2t;
+            document.getElementById('c2-d').innerText = d.c2d;
+            document.getElementById('c3-t').innerText = d.c3t;
+            document.getElementById('c3-d').innerText = d.c3d;
+            document.getElementById('f-t').innerText = d.ft;
+            document.getElementById('f-d').innerText = d.fd;
         }
     </script>
 </body>
