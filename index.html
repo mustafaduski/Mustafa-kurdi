@@ -3,153 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mustafa | High-End Portfolio</title>
+    <title>Mustafa | Global Architect</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;500;800&display=swap');
 
-        :root { --neon: #00f2fe; --white: #ffffff; --bg: #000000; }
+        :root { --neon: #00f2fe; --magical: #7000ff; --dark: #030303; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background: var(--bg); color: var(--white);
-            font-family: 'Space Grotesk', sans-serif; overflow-x: hidden;
+            background: var(--dark); color: #fff;
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
         }
 
-        /* 3D Space Background */
-        #main-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* Particles Background */
+        #particle-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Professional Header */
+        /* Top Navigation - Ultra Minimal */
         header {
-            position: fixed; top: 0; width: 100%; height: 80px;
+            position: fixed; top: 0; width: 100%; height: 90px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; z-index: 1000; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 0 40px; z-index: 1000;
         }
-
-        .logo { font-weight: 700; font-size: 1.4rem; letter-spacing: -1px; }
-        .burger { cursor: pointer; display: flex; flex-direction: column; gap: 7px; }
-        .burger span { width: 30px; height: 2px; background: var(--white); transition: 0.4s; }
+        .logo { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: 5px; color: var(--neon); }
+        .burger { 
+            width: 40px; height: 40px; background: rgba(255,255,255,0.05); 
+            border-radius: 50%; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; gap: 4px; cursor: pointer;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+        }
+        .burger span { width: 18px; height: 1.5px; background: white; transition: 0.3s; }
 
         /* Hero Section */
         .hero {
             height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: flex-start; padding: 0 30px;
+            justify-content: center; padding: 0 30px; position: relative;
         }
-        .hero h1 { 
-            font-size: clamp(3rem, 10vw, 6rem); font-weight: 700; line-height: 0.9;
-            margin-bottom: 20px; text-transform: uppercase;
-        }
-        .hero p { color: var(--neon); font-size: 0.9rem; letter-spacing: 5px; font-weight: 300; }
+        .hero span { color: var(--neon); font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 8px; margin-bottom: 20px; }
+        .hero h1 { font-size: clamp(3.5rem, 12vw, 8rem); font-weight: 800; line-height: 0.85; letter-spacing: -4px; }
 
-        /* Dashboard Grid - The Masterpiece */
-        .dashboard { padding: 50px 20px; display: grid; grid-template-columns: 1fr; gap: 20px; }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 40px; padding: 40px; position: relative;
-            overflow: hidden; backdrop-filter: blur(20px); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        /* Bento Grid Dashboard */
+        .dashboard-grid {
+            display: grid; grid-template-columns: 1fr; gap: 20px; padding: 20px;
+            margin-top: -50px;
         }
 
-        .card:hover { border-color: var(--neon); background: rgba(255, 255, 255, 0.06); }
-        
-        .card i { font-size: 3rem; color: var(--neon); margin-bottom: 25px; display: block; }
-        .card h2 { font-size: 2rem; margin-bottom: 15px; font-weight: 500; }
-        .card p { color: #888; line-height: 1.6; font-size: 1rem; }
+        .bento-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 35px; padding: 30px; backdrop-filter: blur(20px);
+            position: relative; overflow: hidden;
+        }
 
-        /* Floating Nav Overlay */
-        .nav-overlay {
+        .bento-card h3 { font-family: 'Syncopate'; font-size: 0.9rem; margin-bottom: 15px; color: var(--neon); }
+        .bento-card p { color: #888; line-height: 1.6; font-size: 1rem; }
+
+        /* Stats & Experience Visualization */
+        .stat-circle {
+            width: 120px; height: 120px; border: 2px solid var(--magical);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 800; box-shadow: 0 0 30px rgba(112, 0, 255, 0.3);
+            margin: 20px 0;
+        }
+
+        /* Skills Tag Cloud */
+        .tag-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .tag { 
+            background: rgba(255,255,255,0.05); padding: 8px 16px; 
+            border-radius: 50px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Overlay Menu */
+        .full-menu {
             position: fixed; inset: 0; background: #000; z-index: 2000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            clip-path: circle(0% at 90% 5%); transition: 0.7s cubic-bezier(0.85, 0, 0.15, 1);
         }
-        .nav-overlay.active { opacity: 1; pointer-events: auto; }
-        .nav-link { font-size: 3rem; color: white; text-decoration: none; margin: 15px; font-weight: 700; transition: 0.3s; }
-        .nav-link:hover { color: var(--neon); padding-right: 20px; }
+        .full-menu.active { clip-path: circle(150% at 90% 5%); }
+        .menu-item { font-size: 3.5rem; font-weight: 800; color: white; text-decoration: none; margin: 10px; transition: 0.3s; }
+        .menu-item:hover { color: var(--neon); -webkit-text-stroke: 1px var(--neon); }
 
-        /* Action Button */
-        .cta {
-            margin-top: 30px; display: inline-flex; align-items: center; gap: 10px;
-            color: var(--neon); text-decoration: none; font-weight: 700; font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 2px;
-        }
     </style>
 </head>
 <body>
 
-    <canvas id="main-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
 
     <header>
-        <div class="logo">MUSTAFA.<span style="color:var(--neon)">PRO</span></div>
-        <div class="burger" onclick="toggleNav()">
-            <span></span><span></span><span></span>
+        <div class="logo">M.V.</div>
+        <div class="burger" onclick="toggleMenu()">
+            <span></span><span></span>
         </div>
     </header>
 
-    <nav class="nav-overlay" id="overlay">
-        <div onclick="toggleNav()" style="position:absolute; top:30px; left:30px; font-size:2rem;"><i class="fas fa-times"></i></div>
-        <a href="#" class="nav-link">ARCHITECT</a>
-        <a href="#" class="nav-item nav-link">WEB_CORE</a>
-        <a href="#" class="nav-item nav-link">GAME_DEV</a>
-        <a href="#" class="nav-item nav-link">CONTACT</a>
+    <nav class="full-menu" id="menu">
+        <div onclick="toggleMenu()" style="position:absolute; top:30px; right:40px; font-size:2rem;"><i class="fas fa-times"></i></div>
+        <a href="#" class="menu-item">SYSTEM</a>
+        <a href="#" class="menu-item">ENGINE</a>
+        <a href="#" class="menu-item">DESIGN</a>
+        <a href="#" class="menu-item">LAB</a>
     </nav>
 
     <section class="hero">
-        <p>DIGITAL ARCHITECT</p>
-        <h1>BEYOND<br>THE VOID</h1>
+        <span>EST. 2024 / ARCHITECT</span>
+        <h1>FULL<br>STACK<br>MASTER</h1>
     </section>
 
-    <div class="dashboard">
-        <div class="card">
-            <i class="fas fa-code-merge"></i>
-            <h2>WEB CORE</h2>
-            <p>ئاڤاکرنا سیستەمێن وێبێ یێن ئاڵۆز ب ستایلێ Wix Studio و ئەزموونا بەکارهێنەری یا بێ وێنە.</p>
-            <a href="#" class="cta">Explore Engineering <i class="fas fa-arrow-left"></i></a>
+    <div class="dashboard-grid">
+        
+        <div class="bento-card">
+            <h3>WEB_ENGINEERING</h3>
+            <p>ئاڤاکرنا سیستەمێن وێبێ یێن پێشکەفتی ب بەکارهێنانا نووترین تەکنەلۆژیایێن وەک React و Next.js.</p>
+            
+            <div class="tag-container">
+                <div class="tag">Next.js</div><div class="tag">TypeScript</div><div class="tag">AWS</div>
+            </div>
         </div>
 
-        <div class="card">
-            <i class="fas fa-rocket"></i>
-            <h2>GAME LOGIC</h2>
-            <p>پەرەپێدانا میکانیکێن یارییان ب شێوازێ 3D و لۆژیکەکێ پێشکەفتی یێ پڕۆگرامینگێ.</p>
-            <a href="#" class="cta">Initiate Engine <i class="fas fa-arrow-left"></i></a>
+        <div class="bento-card" style="background: linear-gradient(145deg, rgba(112,0,255,0.1), rgba(0,0,0,0));">
+            <h3>GAME_MECHANICS</h3>
+            <p>دروستکرنا جیهانێن سێ رەهەندی و میکانیکێن یارییان ب لۆژیکێ C++ و Unreal Engine.</p>
+            
+            <div class="stat-circle">99%</div>
+            <span style="font-size: 0.7rem; opacity: 0.6;">RENDER ENGINE ACTIVE</span>
         </div>
+
+        <div class="bento-card">
+            <h3>SYSTEM_LOGIC</h3>
+            <p>دیزاینکرنا سیستەمێن ئاڵۆز کو داتایان ب شێوەیەکێ پڕۆفیشناڵ "Process" دکەن.</p>
+            
+            <div class="tag-container">
+                <div class="tag">Docker</div><div class="tag">Kubernetes</div><div class="tag">Python AI</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // --- 3D INTERACTIVE SPACE ENGINE ---
-        const canvas = document.getElementById('main-canvas');
+        // --- HIGH-END PARTICLE SYSTEM ---
+        const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        let stars = [];
+        let particles = [];
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < 400; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width - canvas.width / 2,
-                    y: Math.random() * canvas.height - canvas.height / 2,
-                    z: Math.random() * canvas.width
+            particles = [];
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2
                 });
             }
         }
 
         function draw() {
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "rgba(3, 3, 3, 0.2)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => {
-                s.z -= 1.5; // Smooth speed
-                if (s.z <= 0) s.z = canvas.width;
-                let sx = (s.x / s.z) * canvas.width + canvas.width / 2;
-                let sy = (s.y / s.z) * canvas.height + canvas.height / 2;
-                let size = (1 - s.z/canvas.width) * 2;
-                ctx.fillStyle = `rgba(255, 255, 255, ${1 - s.z/canvas.width})`;
-                ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
+            
+            ctx.strokeStyle = "rgba(0, 242, 254, 0.05)";
+            ctx.lineWidth = 0.5;
+
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dist = Math.sqrt((p.x - p2.x)**2 + (p.y - p2.y)**2);
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
             });
             requestAnimationFrame(draw);
         }
 
-        function toggleNav() { document.getElementById('overlay').classList.toggle('active'); }
+        function toggleMenu() { document.getElementById('menu').classList.toggle('active'); }
 
         window.addEventListener('resize', init);
         init(); draw();
