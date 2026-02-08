@@ -2,170 +2,179 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mustafa | Visual Architect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mustafa | Studio Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --neon: #00f2fe; --glow: rgba(0, 242, 254, 0.5); --dark-base: #00050a; }
+        :root { --neon: #00f2fe; --white: #ffffff; --dark: #050505; }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { 
-            margin: 0; padding: 0; background: var(--dark-base); color: white;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: var(--dark); color: var(--white);
             font-family: 'Inter', sans-serif; overflow-x: hidden;
         }
 
-        /* Moving Space Background */
-        #space-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* Galactic Background */
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Sleek Top Header */
-        header {
-            position: fixed; top: 0; width: 100%; height: 70px;
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 25px 40px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 25px; background: rgba(0, 5, 10, 0.6);
-            backdrop-filter: blur(20px); z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
+        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; color: var(--neon); }
+        .menu-btn { font-size: 1.8rem; cursor: pointer; color: var(--white); }
 
-        .menu-icon { font-size: 1.8rem; color: var(--neon); cursor: pointer; transition: 0.3s; }
-        .logo { font-weight: 800; letter-spacing: 3px; font-size: 1.2rem; text-shadow: 0 0 10px var(--neon); }
-
-        /* Infinite Scroller for Visual Content */
-        .content-wrapper { padding: 90px 15px 40px; }
-
-        .visual-card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 30px; margin-bottom: 30px; overflow: hidden;
-            backdrop-filter: blur(15px); transition: 0.4s ease;
+        /* Hero Section */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 20px; position: relative;
         }
-        .visual-card:hover { border-color: var(--neon); transform: translateY(-5px); }
-
-        .image-container { width: 100%; position: relative; border-bottom: 1px solid rgba(0, 242, 254, 0.2); }
-        .image-container img { width: 100%; display: block; border-radius: 30px 30px 0 0; }
-
-        .card-info { padding: 25px; }
-        .card-info h2 { color: var(--neon); margin: 0 0 10px 0; font-size: 1.6rem; }
-        .card-info p { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; }
-
-        /* Full Menu Overlay */
-        .overlay-menu {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
-            z-index: 2000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transform: translateX(100%); transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+        .hero h1 { 
+            font-size: 4rem; text-transform: uppercase; line-height: 1;
+            background: linear-gradient(to bottom, #fff, #666);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
         }
-        .overlay-menu.open { transform: translateX(0); }
+        .hero p { font-size: 1.2rem; color: var(--neon); letter-spacing: 4px; }
 
-        .nav-link { font-size: 2.2rem; color: white; text-decoration: none; margin: 15px; font-weight: 700; transition: 0.3s; }
-        .nav-link:hover { color: var(--neon); text-shadow: 0 0 20px var(--neon); }
+        /* Professional Showreel (Wix Style) */
+        .section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        
+        .work-card {
+            position: relative; border-radius: 40px; overflow: hidden;
+            margin-bottom: 60px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.02); backdrop-filter: blur(20px);
+            transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        .work-card:hover { transform: scale(1.02); border-color: var(--neon); }
 
-        /* Loading Animation */
-        .loader { height: 2px; background: var(--neon); width: 0; position: fixed; top: 70px; z-index: 1001; transition: 1s; }
+        .work-image { width: 100%; height: 400px; overflow: hidden; position: relative; }
+        .work-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+
+        .work-content { padding: 40px; }
+        .work-content h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .work-content p { color: #aaa; font-size: 1.1rem; line-height: 1.7; }
+
+        /* Custom UI Buttons */
+        .btn-pro {
+            display: inline-block; margin-top: 25px; padding: 15px 35px;
+            border: 1px solid var(--neon); color: var(--neon);
+            text-decoration: none; border-radius: 50px; font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-pro:hover { background: var(--neon); color: #000; box-shadow: 0 0 30px var(--neon); }
+
+        /* Full Overlay Menu */
+        .menu-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 2000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            clip-path: circle(0% at 90% 10%); transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .menu-overlay.active { clip-path: circle(150% at 90% 10%); }
+        .menu-link { font-size: 3rem; color: white; text-decoration: none; margin: 15px; font-weight: 800; }
+        .menu-link:hover { -webkit-text-stroke: 1px var(--neon); color: transparent; }
+
     </style>
 </head>
-<body onload="document.querySelector('.loader').style.width = '100%'">
+<body>
 
-    <div class="loader"></div>
-    <canvas id="space-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
 
-    <header>
-        <div class="menu-icon" onclick="toggleNav()"><i class="fas fa-bars-staggered"></i></div>
-        <div class="logo">MUSTAFA.OS</div>
-    </header>
-
-    <nav class="overlay-menu" id="nav">
-        <div class="menu-icon" onclick="toggleNav()" style="position:absolute; top:20px; right:30px;"><i class="fas fa-times"></i></div>
-        <a href="#" class="nav-link">WEB CORE</a>
-        <a href="#" class="nav-link">GAME ENGINE</a>
-        <a href="#" class="nav-link">UI ARCHITECT</a>
-        <a href="#" class="nav-link">CYBER LOGIC</a>
+    <nav>
+        <div class="logo">MUSTAFA.STUDIO</div>
+        <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
     </nav>
 
-    <div class="content-wrapper">
+    <div class="menu-overlay" id="overlay">
+        <div class="menu-btn" onclick="toggleMenu()" style="position:absolute; top:30px; left:30px;"><i class="fas fa-xmark"></i></div>
+        <a href="#" class="menu-link">STRATEGY</a>
+        <a href="#" class="menu-link">CODING</a>
+        <a href="#" class="menu-link">GAMING</a>
+        <a href="#" class="menu-link">CONTACT</a>
+    </div>
+
+    <div class="hero">
+        <h1>THE ARCHITECT</h1>
+        <p>WEB • DESIGN • CODE • GAMES</p>
+    </div>
+
+    <div class="section">
         
-        <div class="visual-card">
-            <div class="image-container">
+        <div class="work-card">
+            <div class="work-image">
                 
             </div>
-            <div class="card-info">
-                <h2>Web System Architect</h2>
-                <p>ئەز سیستەمێن وێبێ یێن ئاڵۆز ئاڤا دکەم، ژ "Frontend"ێ هەتا دگەهیتە "Cloud Infrastructure".</p>
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <span style="background:rgba(0,242,254,0.1); padding:5px 12px; border-radius:20px; font-size:0.7rem; border:1px solid var(--neon)">REACT</span>
-                    <span style="background:rgba(0,242,254,0.1); padding:5px 12px; border-radius:20px; font-size:0.7rem; border:1px solid var(--neon)">NODE.JS</span>
-                </div>
+            <div class="work-content">
+                <h2>SYSTEM ARCHITECTURE</h2>
+                <p>ئەڤە لایەنێ هەرە بهێزێ کارێ منە؛ دروستکرنا وێبسایتێن گرانبەها ب ستایلێ Wix Studio کو پشت ب سێرڤەرێن ئاست بلند دبەستن.</p>
+                <a href="#" class="btn-pro">VIEW PROJECT</a>
             </div>
         </div>
 
-        <div class="visual-card">
-            <div class="image-container">
+        <div class="work-card">
+            <div class="work-image">
                 
             </div>
-            <div class="card-info">
-                <h2>Game Engine Mechanics</h2>
-                <p>پەرەپێدانا جیهانێن یارییان ب فیزیا و لۆژیکەکێ پێشکەفتی ب کارئینانا Unreal Engine.</p>
+            <div class="work-content">
+                <h2>GAME ENGINE DESIGN</h2>
+                <p>پەرەپێدانا میکانیکێن یارییان و گرافیکێن سێ رەهەندی کو خەیالا مرۆڤی دگوهۆرن.</p>
+                <a href="#" class="btn-pro">ENTER WORLD</a>
             </div>
         </div>
 
-        <div class="visual-card">
-            <div class="image-container">
+        <div class="work-card">
+            <div class="work-image">
                 
             </div>
-            <div class="card-info">
-                <h2>UI/UX Roadmap</h2>
-                <p>نەخشەیێ فێربوون و بجهئینانا دیزاینێن مۆدێرن و کارلێکەر بۆ هەمی پلاتفۆڕمان.</p>
+            <div class="work-content">
+                <h2>DEVELOPMENT ROADMAP</h2>
+                <p>نەخشەیێ گەشتەکا زانستی د ناڤ جیهانا کۆدینگێ دا، ژ دەستپێکێ هەتا دبیە شارەزا.</p>
+                <a href="#" class="btn-pro">LEARN MORE</a>
             </div>
         </div>
 
     </div>
 
     <script>
-        // --- STARFIELD INTERACTIVE ENGINE ---
-        const canvas = document.getElementById('space-canvas');
+        // --- LUXURY STARFIELD ENGINE ---
+        const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
-        let mouseX = 0, mouseY = 0;
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             stars = [];
-            for (let i = 0; i < 250; i++) {
+            for (let i = 0; i < 200; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     z: Math.random() * canvas.width,
-                    o: Math.random()
+                    size: Math.random() * 2
                 });
             }
         }
 
         function draw() {
-            ctx.fillStyle = "#00050a";
+            ctx.fillStyle = "#050505";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
             stars.forEach(s => {
-                s.z -= 0.8;
+                s.z -= 0.5;
                 if (s.z <= 0) s.z = canvas.width;
-
                 let sx = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
                 let sy = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
-
-                // Subtle parallax based on screen position
-                sx += (mouseX - canvas.width/2) * 0.02;
-                sy += (mouseY - canvas.height/2) * 0.02;
-
-                let size = (1 - s.z / canvas.width) * 2.5;
-                ctx.fillStyle = `rgba(0, 242, 254, ${1 - s.z/canvas.width})`;
-                ctx.beginPath();
-                ctx.arc(sx, sy, size, 0, Math.PI * 2);
-                ctx.fill();
+                let size = (1 - s.z/canvas.width) * 3;
+                ctx.fillStyle = `rgba(255, 255, 255, ${1 - s.z/canvas.width})`;
+                ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(draw);
         }
 
-        function toggleNav() { document.getElementById('nav').classList.toggle('open'); }
+        function toggleMenu() { document.getElementById('overlay').classList.toggle('active'); }
 
-        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
         window.addEventListener('resize', init);
         init(); draw();
     </script>
